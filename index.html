@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spark Companies — Recruitment Compliance Training</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--S:#FFD600;--D:#1a1a1a;--M:#444;--L:#f9f9f7;--G:#16a34a;--R:#dc2626;--B:#e8e8e4;--purple:#7c3aed;--blue:#3b82f6;--teal:#059669;--amber:#f59e0b;--gray:#94a3b8}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--L);min-height:100vh;display:flex;flex-direction:column}
+button{font-family:inherit}
+.top-bar{background:var(--D);color:#fff;padding:8px 16px;display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;border-bottom:2px solid var(--S)}
+.top-bar .conf{color:var(--S);font-weight:700}
+.layout{display:flex;flex:1}
+nav{width:230px;background:#fff;border-right:1px solid var(--B);padding:0 8px 8px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0}
+nav .logo-area{padding:16px 10px 14px;border-bottom:1px solid var(--B);margin-bottom:6px}
+nav .divider{padding:10px 10px 4px;font-size:9px;font-weight:700;color:#bbb;letter-spacing:1.5px}
+nav button.nav-btn{display:flex;align-items:center;gap:7px;padding:7px 10px;background:transparent;color:#888;border:1px solid transparent;border-radius:7px;cursor:pointer;width:100%;text-align:left;font-size:12px;font-weight:400;transition:all .15s}
+nav button.nav-btn.active{background:#FFD60030;color:var(--D);border:1px solid var(--S);font-weight:700}
+nav button.nav-btn:hover:not(.active){background:#f5f5f0}
+nav .nav-footer{margin-top:auto;padding:12px 10px 6px;border-top:1px solid var(--B)}
+nav .nav-footer .ft1{font-size:10px;color:#999}
+nav .nav-footer .ft2{font-size:9px;color:#ccc}
+main{flex:1;padding:32px;max-width:880px;overflow-y:auto}
+footer{background:var(--D);color:#666;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;font-size:10px;border-top:2px solid var(--S);flex-shrink:0}
+.section-title{margin-bottom:20px}
+.section-title h2{color:var(--D);margin:0;font-size:21px;font-weight:800;display:flex;align-items:center;gap:10px}
+.section-title h2 .bar{background:var(--S);width:5px;height:24px;border-radius:3px;display:inline-block;flex-shrink:0}
+.section-title .sub{color:#777;font-size:13px;margin:6px 0 0 15px}
+.card{background:#fff;border:1px solid var(--B);border-radius:10px;padding:14px}
+.card.hl{border-left:3px solid var(--S)}
+.tag{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;display:inline-block}
+/* Tile Map */
+.tile-map{position:relative;margin:0 auto 16px}
+.tile{position:absolute;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;transition:all .15s;cursor:pointer}
+.tile:hover{transform:scale(1.1);z-index:3}
+.tile.selected{transform:scale(1.15);z-index:2;border-width:2.5px;box-shadow:0 3px 12px rgba(0,0,0,.3)}
+.tile.empty{cursor:default;color:#bbb}
+.legend{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--M)}
+.legend-dot{width:12px;height:12px;border-radius:3px}
+.state-detail{background:#fff;border:1px solid var(--B);border-radius:10px;padding:16px;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+/* Grid helpers */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.flex-col{display:flex;flex-direction:column}
+.gap-8{gap:8px}
+.gap-10{gap:10px}
+.gap-12{gap:12px}
+.mb-16{margin-bottom:16px}
+.mb-20{margin-bottom:20px}
+.mb-24{margin-bottom:24px}
+/* Do/Don't pills */
+.pill-ok{background:#16a34a10;border:1px solid #16a34a20;border-radius:7px;padding:10px}
+.pill-bad{background:#dc262610;border:1px solid #dc262620;border-radius:7px;padding:10px}
+.pill-label{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-weight:600;font-size:10px}
+/* Accordion */
+.accordion{background:#fff;border:1px solid var(--B);border-radius:10px;overflow:hidden}
+.accordion-header{display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px 16px;border:none;background:transparent;cursor:pointer;text-align:left}
+.accordion-header.open{background:#FFD60010}
+.accordion-body{border-top:1px solid var(--B);padding:14px 16px}
+/* Quiz */
+.quiz-option{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1.5px solid var(--B);border-radius:7px;cursor:pointer;text-align:left;font-size:12px;color:var(--D);background:var(--L);width:100%;transition:all .1s}
+.quiz-option:hover{background:#f0f0ec}
+.quiz-option.selected{background:#FFD60022;border-color:var(--S)}
+.quiz-option.correct{background:#16a34a10;border-color:var(--G)}
+.quiz-option.wrong{background:#dc262610;border-color:var(--R)}
+.radio-circle{width:18px;height:18px;border-radius:50%;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.alert-box{border-radius:10px;padding:16px;margin-bottom:20px}
+.alert-red{background:#dc262608;border:1px solid #dc262630}
+.alert-yellow{background:#FFD60015;border:1px solid var(--S)}
+/* Template pre */
+pre.template{background:var(--L);border:1px solid var(--B);border-radius:8px;padding:16px;font-size:12px;color:var(--D);white-space:pre-wrap;font-family:inherit;line-height:1.7;margin:0}
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
+/* Hidden sections */
+.section-content{display:none}
+.section-content.active{display:block}
+/* Step connector */
+.step-line{width:2px;flex:1;background:var(--S);margin-top:4px}
+.step-circle{width:32px;height:32px;border-radius:50%;background:var(--S);color:var(--D);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;border:2px solid var(--D)}
+/* Responsive */
+@media(max-width:900px){nav{width:180px}main{padding:20px}}
+@media(max-width:700px){.layout{flex-direction:column}nav{width:100%;height:auto;position:relative;flex-direction:row;overflow-x:auto;padding:8px}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}main{padding:16px}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFD600" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+  <span class="conf">CONFIDENTIAL</span>
+  <span style="color:#aaa">|</span>
+  <span>Proprietary to Spark Companies</span>
+</div>
+
+<div class="layout">
+<nav id="sidebar">
+  <div class="logo-area">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="position:relative;width:32px;height:32px">
+        <div style="position:absolute;inset:0;background:var(--S);border-radius:7px;transform:rotate(3deg)"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#1a1a1a"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+      </div>
+      <div><div style="font-weight:800;font-size:15px;color:var(--D);letter-spacing:-0.5px;line-height:1.1">SPARK</div><div style="font-weight:500;font-size:9px;color:#888;letter-spacing:2px;line-height:1.1">COMPANIES</div></div>
+    </div>
+  </div>
+  <div id="nav-items"></div>
+  <div class="nav-footer">
+    <div class="ft1">🔒 Proprietary & Confidential</div>
+    <div class="ft2">v2.0 — Effective February 2026</div>
+  </div>
+</nav>
+
+<main id="main-content"></main>
+</div>
+
+<footer>
+  <div style="display:flex;align-items:center;gap:6px"><span style="color:var(--S);font-weight:700">🔒 CONFIDENTIAL</span><span>— Spark Companies</span></div>
+  <div style="color:#555">v2.0 — Effective February 2026 | Next Review: August 2026</div>
+</footer>
+
+<script>
+const VERSION="v2.0 — Effective February 2026 | Next Review: August 2026";
+
+// ═══ NAV SECTIONS ═══
+const sections=[
+{id:"div1",label:"CORE TRAINING",divider:true},
+{id:"overview",label:"Training Overview",icon:"📋"},
+{id:"protected",label:"Protected Categories",icon:"🛡"},
+{id:"dosdont",label:"Do's & Don'ts by Topic",icon:"⚖"},
+{id:"redflags",label:"Red Flag Phrases",icon:"🚨"},
+{id:"disparate",label:"Disparate Impact 101",icon:"⚠"},
+{id:"retaliation",label:"Retaliation Awareness",icon:"🛡"},
+{id:"div2",label:"DEEP DIVES",divider:true},
+{id:"drug",label:"Drug Screening",icon:"💊"},
+{id:"background",label:"Background Checks & Ban the Box",icon:"🔍"},
+{id:"social",label:"Social Media Screening",icon:"👁"},
+{id:"aitech",label:"AI & Tech in Hiring",icon:"🤖"},
+{id:"div3",label:"COMPLIANCE TOOLS",divider:true},
+{id:"state",label:"State-by-State: Ban the Box",icon:"📍"},
+{id:"salary",label:"Salary & Pay Transparency",icon:"💰"},
+{id:"marijuana",label:"Marijuana Employment Map",icon:"🗺"},
+{id:"timeline",label:"Compliance Timeline",icon:"⏰"},
+{id:"escalation",label:"Escalation Flowchart",icon:"🔀"},
+{id:"retention",label:"Record Retention",icon:"📦"},
+{id:"div4",label:"DAY-TO-DAY TOOLS",divider:true},
+{id:"documentation",label:"Document Your Decisions",icon:"📋"},
+{id:"notetaking",label:"Interview Note-Taking",icon:"✏"},
+{id:"accommodation",label:"Accommodation Requests",icon:"♿"},
+{id:"i9everify",label:"I-9 & E-Verify",icon:"✅"},
+{id:"templates",label:"Communication Templates",icon:"📧"},
+{id:"faq",label:"Recruiter FAQ",icon:"💬"},
+{id:"div5",label:"ASSESSMENT",divider:true},
+{id:"scenarios",label:"Practice Scenarios",icon:"👥"},
+{id:"quiz",label:"Knowledge Quiz",icon:"🏆"},
+{id:"onepager",label:"Quick Reference Cards",icon:"📄"},
+{id:"acknowledgment",label:"Training Acknowledgment",icon:"✅"},
+{id:"div6",label:"TRAINER TOOLKIT",divider:true},
+{id:"trainerguide",label:"Trainer Script & Guide",icon:"🎤"},
+{id:"resources",label:"Helpful Resources & Links",icon:"🔗"}
+];
+
+// ═══ TILE MAP POSITIONS ═══
+const SG={AK:[0,0],ME:[10,0],WI:[5,1],VT:[9,1],NH:[10,1],WA:[0,2],ID:[1,2],MT:[2,2],ND:[3,2],MN:[4,2],IL:[5,2],MI:[7,2],NY:[8,2],MA:[9,2],RI:[10,2],OR:[0,3],NV:[1,3],WY:[2,3],SD:[3,3],IA:[4,3],IN:[5,3],OH:[6,3],PA:[7,3],NJ:[8,3],CT:[9,3],CA:[0,4],UT:[1,4],CO:[2,4],NE:[3,4],MO:[4,4],KY:[5,4],WV:[6,4],VA:[7,4],MD:[8,4],DE:[9,4],AZ:[1,5],NM:[2,5],KS:[3,5],AR:[4,5],TN:[5,5],NC:[6,5],SC:[7,5],DC:[8,5],OK:[3,6],LA:[4,6],MS:[5,6],AL:[6,6],GA:[7,6],FL:[8,6],HI:[0,7],TX:[3,7]};
+const SN={AL:"Alabama",AK:"Alaska",AZ:"Arizona",AR:"Arkansas",CA:"California",CO:"Colorado",CT:"Connecticut",DE:"Delaware",DC:"Washington D.C.",FL:"Florida",GA:"Georgia",HI:"Hawaii",ID:"Idaho",IL:"Illinois",IN:"Indiana",IA:"Iowa",KS:"Kansas",KY:"Kentucky",LA:"Louisiana",ME:"Maine",MD:"Maryland",MA:"Massachusetts",MI:"Michigan",MN:"Minnesota",MS:"Mississippi",MO:"Missouri",MT:"Montana",NE:"Nebraska",NV:"Nevada",NH:"New Hampshire",NJ:"New Jersey",NM:"New Mexico",NY:"New York",NC:"North Carolina",ND:"North Dakota",OH:"Ohio",OK:"Oklahoma",OR:"Oregon",PA:"Pennsylvania",RI:"Rhode Island",SC:"South Carolina",SD:"South Dakota",TN:"Tennessee",TX:"Texas",UT:"Utah",VT:"Vermont",VA:"Virginia",WA:"Washington",WV:"West Virginia",WI:"Wisconsin",WY:"Wyoming"};
+
+// ═══ BAN THE BOX DATA ═══
+const btb={CA:{c:"#7c3aed",t:"Private (5+)",d:"Fair Chance Act: criminal history inquiry only after conditional offer. Applies to private employers with 5+ employees. EEOC individualized assessment required."},CO:{c:"#7c3aed",t:"Private (all)",d:"Chance to Compete Act: private employers cannot ask on application. Public employers wait until finalist stage."},CT:{c:"#7c3aed",t:"Private (all)",d:"No criminal history on applications. No inquiry about erased records. Pardoned convictions cannot be sole basis for denial."},HI:{c:"#7c3aed",t:"Private (all)",d:"First state (1998). No inquiry until after conditional offer. Cannot bar employment unless conviction has rational relationship to position. 10-year lookback limit."},IL:{c:"#7c3aed",t:"Private (15+)",d:"Employee Background Fairness Act: no inquiry until interview notification or conditional offer. Cannot bar unless substantially related to position."},MA:{c:"#7c3aed",t:"Private (all)",d:"CORI Reform Act: no criminal history on applications. Employers may access criminal records only after interview. Sealed/expunged records excluded."},MN:{c:"#7c3aed",t:"Private (all)",d:"No criminal history on application or before interview for private employers. Public employers wait until finalist or conditional offer stage."},NJ:{c:"#7c3aed",t:"Private (all)",d:"Opportunity to Compete Act: no inquiry until after first interview. Cannot consider expunged records."},NM:{c:"#7c3aed",t:"Private (all)",d:"Criminal Offender Employment Act: applies to all employers. Cannot deny solely based on arrest record. Conviction must be directly related to position."},OR:{c:"#7c3aed",t:"Private (all)",d:"Ban the Box: no criminal history on applications for private and public employers. Inquiry permitted after interview."},RI:{c:"#7c3aed",t:"Private (all)",d:"No criminal history on applications. Cannot inquire until first interview. Does not apply to law enforcement or certain sensitive positions."},VT:{c:"#7c3aed",t:"Private (all)",d:"Fair Chance: no criminal history on applications. Inquiry only after conditional offer for most positions. Cannot consider expunged/sealed records."},WA:{c:"#7c3aed",t:"Private (all)",d:"Fair Chance Act: no inquiry until after determination of qualification or conditional offer. Expanded in 2026 to cover existing employees for promotions."},TX:{c:"#7c3aed",t:"Private (15+)",d:"New (effective Sept 2025): employers with 15+ employees must remove criminal history from applications. Inquiry after candidate deemed otherwise qualified."},AZ:{c:"#3b82f6",t:"Public only",d:"Executive Order 2017-07: public employers cannot ask on application. No inquiry until after initial interview. Some cities (Phoenix, Tucson) have local ordinances."},DE:{c:"#3b82f6",t:"Public only",d:"No criminal/credit check until after initial interview for public employers. Wilmington and New Castle County have local policies."},GA:{c:"#3b82f6",t:"Public only",d:"Executive order: cannot use criminal record as automatic bar to public employment. Atlanta has separate ordinance."},IN:{c:"#3b82f6",t:"Public only",d:"Executive Order 17-15: state executive branch only. No criminal history on applications."},KS:{c:"#3b82f6",t:"Public only",d:"Executive Order 18-12: state executive branch. No criminal history on applications."},KY:{c:"#3b82f6",t:"Public only",d:"Executive order: applies to state executive branch employment. Louisville has a separate local ordinance."},LA:{c:"#3b82f6",t:"Public only",d:"Executive order: applies to state civil service. New Orleans has a separate local fair chance ordinance."},MD:{c:"#3b82f6",t:"Public only",d:"State law applies to public employers only. Baltimore and Prince George's County have local ordinances covering private employers."},MI:{c:"#3b82f6",t:"Public only",d:"Clean Slate Act and executive directive: public employers and state contractors. Detroit and other cities have local ordinances."},MO:{c:"#3b82f6",t:"Public only",d:"Executive order: state agencies. Kansas City and St. Louis have local fair chance ordinances."},NE:{c:"#3b82f6",t:"Public only",d:"Executive order and statute: state and local government employers. Lincoln and Omaha have local ordinances."},NV:{c:"#3b82f6",t:"Public only",d:"State law restricts public employers. Cannot ask on application. Las Vegas has a local ordinance."},NH:{c:"#3b82f6",t:"Public only",d:"Executive order: state agencies only. No criminal history on applications for state employment."},NY:{c:"#3b82f6",t:"Public only (NYC private)",d:"State law covers public employers. NYC Fair Chance Act covers all employers with 4+ employees — criminal inquiry only after conditional offer."},NC:{c:"#3b82f6",t:"Public only",d:"Executive order: state agencies. Charlotte, Durham, and Raleigh have local policies."},ND:{c:"#3b82f6",t:"Public only",d:"State policy covers state employment. No criminal history on state job applications."},OH:{c:"#3b82f6",t:"Public only",d:"Executive order: state agencies. Columbus, Cincinnati, Cleveland, Toledo have local ordinances (some cover private)."},OK:{c:"#3b82f6",t:"Public only",d:"Executive order: state agencies. Oklahoma City has a local policy."},PA:{c:"#3b82f6",t:"Public only",d:"Executive order: state agencies. Philadelphia Fair Chance Hiring Law covers private employers with 1+ employees."},TN:{c:"#3b82f6",t:"Public only",d:"State policy: state agencies. Memphis and Nashville have local policies."},UT:{c:"#3b82f6",t:"Public only",d:"State law: public employers. Salt Lake City has a local policy."},VA:{c:"#3b82f6",t:"Public only",d:"Executive order: state agencies. No inquiry until after conditional offer for state employment."},WI:{c:"#3b82f6",t:"Public only",d:"State law: conviction record is a protected class for public employment. Madison and Milwaukee have local ordinances."},DC:{c:"#3b82f6",t:"Public + Private",d:"Fair Criminal Record Screening Act: covers all employers with 11+ employees. No inquiry until conditional offer. Penalties up to $5,000–$20,000 per violation."},AL:{c:"#94a3b8",t:"No state law",d:"No statewide Ban the Box law. Birmingham has a public-sector ordinance. Follow federal EEOC guidance."},AK:{c:"#94a3b8",t:"No state law",d:"No statewide Ban the Box law. No known local ordinances. Follow federal EEOC guidance."},AR:{c:"#94a3b8",t:"No state law",d:"No statewide Ban the Box law. Pulaski County has a public-sector ordinance. Follow federal EEOC guidance."},FL:{c:"#94a3b8",t:"No state law",d:"No statewide law. Multiple cities have public-sector ordinances (Jacksonville, Tampa, Orlando, Miami-Dade, etc.)."},ID:{c:"#94a3b8",t:"No state law",d:"No statewide Ban the Box law. No known local ordinances. Follow federal EEOC guidance."},IA:{c:"#94a3b8",t:"No state law",d:"No statewide law. Waterloo covers private employers locally. Johnson County and Linn County have public-sector ordinances."},MS:{c:"#94a3b8",t:"No state law",d:"No statewide Ban the Box law. No known local ordinances. Follow federal EEOC guidance."},MT:{c:"#94a3b8",t:"No state law",d:"No statewide Ban the Box law. Follow federal EEOC guidance."},SC:{c:"#94a3b8",t:"No state law",d:"No statewide law. Ban the Box Act (SB 3272) introduced in 2025 legislature — not yet enacted."},SD:{c:"#94a3b8",t:"No state law",d:"No statewide Ban the Box law. No known local ordinances. Follow federal EEOC guidance."},WV:{c:"#94a3b8",t:"No state law",d:"No statewide Ban the Box law. No known local ordinances. Follow federal EEOC guidance."},WY:{c:"#94a3b8",t:"No state law",d:"No statewide Ban the Box law. No known local ordinances. Follow federal EEOC guidance."}};
+
+// ═══ SALARY DATA ═══
+const sal={CA:{c:"#7c3aed",t:"Ban + Transparency",d:"Cannot ask salary history. Must include pay scale in ALL job postings (SB 1162, 15+ employees). Must provide on request."},CO:{c:"#7c3aed",t:"Ban + Transparency",d:"Cannot ask salary history. Must include pay range in ALL job postings including remote roles (Equal Pay for Equal Work Act). Applies to all employers."},CT:{c:"#7c3aed",t:"Ban + Transparency",d:"Cannot ask salary history. Must disclose pay range upon request or by time of offer. Must provide on promotion/transfer."},DC:{c:"#7c3aed",t:"Ban + Transparency",d:"Cannot ask salary history. Pay transparency required in job postings. Applies to all employers."},HI:{c:"#7c3aed",t:"Ban + Transparency",d:"Cannot ask salary history. Must include salary range/hourly rate in job postings (50+ employees)."},IL:{c:"#7c3aed",t:"Ban + Transparency",d:"Cannot ask salary history. Must include pay scale and benefits description in all job postings (15+ employees, effective Jan 2025). Fines $500–$10,000."},MD:{c:"#7c3aed",t:"Ban + Transparency",d:"Cannot ask salary history. Must provide pay range on request. Must provide on initial offer."},MN:{c:"#7c3aed",t:"Ban + Transparency",d:"Must include starting salary range and benefits in all job postings. Cannot ask salary history. Effective Jan 2025."},NY:{c:"#7c3aed",t:"Ban + Transparency",d:"Statewide salary history ban. NYC + statewide: pay range required in all job postings (4+ employees)."},RI:{c:"#7c3aed",t:"Ban + Transparency",d:"Cannot ask salary history. Must provide pay range on request and at hire. Pay transparency in postings required."},WA:{c:"#7c3aed",t:"Ban + Transparency",d:"Cannot ask salary history. Must include pay range in all postings (15+ employees, SB 5761). Must disclose on request."},DE:{c:"#3b82f6",t:"History Ban",d:"Cannot ask salary history. Pay transparency posting law signed Sept 2025, effective June 2027 (25+ employees)."},MA:{c:"#3b82f6",t:"History Ban",d:"First state to ban salary history (2018). Cannot ask or use. Must provide pay range if candidate requests after offer."},ME:{c:"#3b82f6",t:"History Ban",d:"Cannot ask salary history until after offer. Cannot retaliate for wage discussions. No posting transparency requirement."},MO:{c:"#3b82f6",t:"History Ban (local)",d:"Kansas City bans salary history inquiries. No statewide ban. No pay transparency posting requirement."},NJ:{c:"#3b82f6",t:"History Ban",d:"Cannot use applicant's salary history for job offers. Cannot retaliate for non-disclosure. Fines $1,000–$10,000."},OR:{c:"#3b82f6",t:"History Ban",d:"Cannot ask salary history. Must provide pay range after interview if requested. All employers."},PA:{c:"#3b82f6",t:"History Ban (local)",d:"Philadelphia: cannot ask salary history (all employers). Pittsburgh has similar ordinance. No statewide ban."},VT:{c:"#3b82f6",t:"History Ban",d:"Cannot ask about pay history. Cannot retaliate for wage discussions."},NV:{c:"#059669",t:"Transparency Only",d:"Must disclose wage/salary range to applicants after interview. No salary history ban at state level. Penalties up to $5,000."},OH:{c:"#059669",t:"Local Laws",d:"No statewide law. Cleveland: pay range in postings + salary history ban (15+ employees, effective Oct 2025). Cincinnati and Columbus/Toledo have similar local ordinances."},AL:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement. Follow federal Equal Pay Act."},AK:{c:"#94a3b8",t:"No law",d:"No salary history ban. Follow federal Equal Pay Act."},AZ:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement. Follow federal Equal Pay Act."},AR:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},FL:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},GA:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement. Draft bills under review."},ID:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},IN:{c:"#94a3b8",t:"No law",d:"No salary history ban. HB 1300 proposed — not enacted."},IA:{c:"#94a3b8",t:"No law",d:"No salary history ban. Follow federal Equal Pay Act."},KS:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},KY:{c:"#94a3b8",t:"No law",d:"No salary history ban. HB 362 proposed — not enacted."},LA:{c:"#94a3b8",t:"No law",d:"No salary history ban (New Orleans has a local ordinance for city contractors)."},MI:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},MS:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},MT:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},NE:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},NH:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},NM:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},NC:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},ND:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},OK:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},SC:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},SD:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},TN:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},TX:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},UT:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},VA:{c:"#94a3b8",t:"No law",d:"No salary history ban. SB 1132 proposed but vetoed."},WV:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},WI:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."},WY:{c:"#94a3b8",t:"No law",d:"No salary history ban. No pay transparency requirement."}};
+
+// ═══ MARIJUANA DATA ═══
+const mj={CA:{c:"#7c3aed",t:"Strong protections",d:"AB 2188 (eff. 2024): cannot discriminate for off-duty use. Cannot penalize for positive THC test alone. Safety-sensitive and federal contract exceptions."},CT:{c:"#7c3aed",t:"Strong protections",d:"Recreational law explicitly protects off-duty use. Cannot take adverse action based solely on positive THC test. Federal/safety exceptions."},MN:{c:"#7c3aed",t:"Strong protections",d:"Consumable Products Act: cannot refuse to hire or discipline for off-duty marijuana use during nonworking hours. Safety-sensitive and federal exceptions."},MT:{c:"#7c3aed",t:"Strong protections",d:"HB 701: cannot take adverse action for off-duty recreational use. Lawful product protection statute covers marijuana."},NJ:{c:"#7c3aed",t:"Strong protections",d:"Cannot refuse to hire or discharge based solely on positive marijuana test. Must demonstrate impairment at work. Pre-employment testing restricted."},NY:{c:"#7c3aed",t:"Strong protections",d:"Off-Duty Conduct Law protects legal off-duty marijuana use. Cannot test for recreational use unless safety exception."},RI:{c:"#7c3aed",t:"Strong protections",d:"Recreational law explicitly protects off-duty use. Cannot refuse to hire, fire, or discriminate for lawful off-duty marijuana use."},WA:{c:"#7c3aed",t:"Strong protections",d:"SB 5123 (eff. 2024): cannot discriminate for off-duty use or positive test for non-psychoactive metabolites. Safety-sensitive exceptions."},NV:{c:"#7c3aed",t:"Strong protections",d:"Cannot refuse to hire based on positive marijuana test (pre-employment). Safety-sensitive roles and federal positions exempt."},DC:{c:"#7c3aed",t:"Strong protections",d:"Cannot refuse to hire, fire, or take adverse action for failing marijuana test. Testing only after conditional offer. Safety-sensitive and federal exceptions."},AZ:{c:"#3b82f6",t:"Medical protections",d:"Cannot discriminate against medical cardholders solely for status or positive test. Employers may prohibit on-duty use/impairment."},AR:{c:"#3b82f6",t:"Medical protections",d:"Cannot discriminate against medical cardholders (9+ employees). May discipline for on-duty use or impairment."},DE:{c:"#3b82f6",t:"Medical protections",d:"Cannot discriminate against medical cardholders for status or positive test. Employers may prohibit workplace use."},IL:{c:"#3b82f6",t:"Medical protections",d:"Cannabis Act protects medical cardholders from discrimination. Recreational: employers may maintain zero-tolerance policies but should proceed carefully."},ME:{c:"#3b82f6",t:"Medical protections",d:"Medical patients protected from employment discrimination. Recreational law does not explicitly protect off-duty use."},MA:{c:"#3b82f6",t:"Medical protections",d:"Medical patients may be protected under disability accommodation law. Employers should engage interactive process."},MO:{c:"#3b82f6",t:"Medical protections",d:"Medical marijuana protections: cannot discriminate against cardholders. No explicit employment protections for recreational use."},NH:{c:"#3b82f6",t:"Medical protections",d:"Courts have indicated disability accommodation law may cover medical marijuana patients on case-by-case basis."},NM:{c:"#3b82f6",t:"Medical protections",d:"Lynn and Erin Compassionate Use Act: cannot discriminate against medical patients. Recreational legal but no explicit off-duty protections."},OK:{c:"#3b82f6",t:"Medical protections",d:"Unity Bill: cannot discriminate against medical cardholders unless safety-sensitive. Employers may prohibit on-duty use."},PA:{c:"#3b82f6",t:"Medical protections",d:"Medical Marijuana Act protects patients from discrimination. Philadelphia prohibits pre-employment THC testing (with exceptions)."},SD:{c:"#3b82f6",t:"Medical protections",d:"Medical law includes anti-discrimination provisions. Employers may still prohibit workplace use."},VA:{c:"#3b82f6",t:"Medical protections",d:"Cannot require disclosure of marijuana arrest/charge in hiring. Medical patients have some protections."},WV:{c:"#3b82f6",t:"Medical protections",d:"Medical Cannabis Act: cannot discriminate against patients. Employers may prohibit workplace use."},LA:{c:"#3b82f6",t:"Medical (public)",d:"Medical marijuana protections for state/local government employees only. Private employers not covered."},UT:{c:"#3b82f6",t:"Medical (public)",d:"Medical marijuana protections for state/local government employees. Private employers may maintain zero-tolerance."},AK:{c:"#059669",t:"Legal, no protections",d:"Recreational legal. No employment protections — employers may test and terminate for off-duty use."},CO:{c:"#059669",t:"Legal, no protections",d:"Recreational legal. CO Supreme Court: employers CAN fire for off-duty use (Coats v. Dish Network)."},MI:{c:"#059669",t:"Legal, no protections",d:"Recreational legal. No employment protections for recreational users. Private employers may test and terminate."},OR:{c:"#059669",t:"Legal, no protections",d:"Recreational legal. No employment protections — employers may maintain drug-free workplace policies."},VT:{c:"#059669",t:"Legal, no protections",d:"Recreational legal. Medical patients may have disability accommodation rights. No explicit recreational protections."},FL:{c:"#f59e0b",t:"Medical only, no protections",d:"Medical marijuana legal. No employment protections — employers not required to accommodate. May test and terminate."},HI:{c:"#f59e0b",t:"Medical only, no protections",d:"Medical marijuana legal. No employment protections in statute. Employers may enforce zero-tolerance policies."},MD:{c:"#f59e0b",t:"Medical only, no protections",d:"Medical and recreational legal. No explicit employment protections. Employers may maintain drug-free workplace."},ND:{c:"#f59e0b",t:"Medical only, no protections",d:"Medical marijuana legal. No employment protections. Employers may test and terminate for off-duty use."},OH:{c:"#f59e0b",t:"Medical only, no protections",d:"Medical marijuana legal (recreational approved 2023 — limited implementation). No employment protections."},AL:{c:"#94a3b8",t:"No/minimal law",d:"No recreational or comprehensive medical marijuana law. Employers may test and enforce zero-tolerance."},GA:{c:"#94a3b8",t:"No/minimal law",d:"Low-THC oil only. No employment protections. Employers may maintain zero-tolerance drug policies."},ID:{c:"#94a3b8",t:"No/minimal law",d:"Marijuana illegal (all forms). Employers may test and terminate. No protections."},IN:{c:"#94a3b8",t:"No/minimal law",d:"Marijuana illegal (CBD oil with low THC permitted). Employers may test and enforce zero-tolerance."},IA:{c:"#94a3b8",t:"No/minimal law",d:"Limited medical CBD program. No employment protections. Employers may test and terminate."},KS:{c:"#94a3b8",t:"No/minimal law",d:"Marijuana illegal. No medical or recreational program. Employers may test and enforce zero-tolerance."},KY:{c:"#94a3b8",t:"No/minimal law",d:"Medical marijuana law signed 2023, effective Jan 2025. No employment protections specified."},MS:{c:"#94a3b8",t:"No/minimal law",d:"Medical marijuana legal (2022). No employment protections. Employers may test and enforce zero-tolerance."},NE:{c:"#94a3b8",t:"No/minimal law",d:"Medical marijuana approved by voters 2024 — implementation ongoing. No employment protections."},NC:{c:"#94a3b8",t:"No/minimal law",d:"No recreational or comprehensive medical marijuana law. Employers may test and enforce zero-tolerance."},SC:{c:"#94a3b8",t:"No/minimal law",d:"No recreational or medical marijuana law. Employers may test and enforce zero-tolerance."},TN:{c:"#94a3b8",t:"No/minimal law",d:"No recreational or comprehensive medical marijuana law. Employers may test and enforce zero-tolerance."},TX:{c:"#94a3b8",t:"No/minimal law",d:"Compassionate Use (very limited low-THC). No employment protections. Employers may test and enforce zero-tolerance."},WI:{c:"#94a3b8",t:"No/minimal law",d:"No recreational or comprehensive medical marijuana law. Employers may test and enforce zero-tolerance."},WY:{c:"#94a3b8",t:"No/minimal law",d:"Marijuana illegal. No medical or recreational program. Employers may test and enforce zero-tolerance."}};
+
+// ═══ STATE ═══
+let active="overview";
+let mapSel={btb:null,sal:null,mj:null};
+let quizAnswers={};
+let quizSubmitted=false;
+let accordionState={};
+let ackData={name:"",date:"",checked:false,submitted:false};
+
+// ═══ BUILD NAV ═══
+function buildNav(){
+  const c=document.getElementById("nav-items");
+  c.innerHTML="";
+  sections.forEach(s=>{
+    if(s.divider){const d=document.createElement("div");d.className="divider";d.textContent=s.label;c.appendChild(d);return}
+    const b=document.createElement("button");
+    b.className="nav-btn"+(active===s.id?" active":"");
+    b.innerHTML=`<span>${s.icon}</span><span>${s.label}</span>`;
+    b.onclick=()=>{active=s.id;buildNav();render()};
+    c.appendChild(b);
+  });
+}
+
+// ═══ TILE MAP BUILDER ═══
+function buildTileMap(data,mapKey,legend){
+  const sz=38,gp=3;
+  let h=`<div class="tile-map" style="width:${11*(sz+gp)}px;height:${8*(sz+gp)}px">`;
+  Object.entries(SG).forEach(([st,[x,y]])=>{
+    const d=data[st],isSel=mapSel[mapKey]===st;
+    const bg=d?d.c:"#e5e5e0";
+    const cls="tile"+(isSel?" selected":"")+(d?"":" empty");
+    const bdr=isSel?`2.5px solid #1a1a1a`:`1.5px solid rgba(255,255,255,0.25)`;
+    const shd=isSel?"0 3px 12px rgba(0,0,0,.3)":"0 1px 3px rgba(0,0,0,.08)";
+    h+=`<div class="${cls}" data-st="${st}" data-map="${mapKey}" onclick="tileClick('${st}','${mapKey}')" style="left:${x*(sz+gp)}px;top:${y*(sz+gp)}px;width:${sz}px;height:${sz}px;background:${bg};border:${bdr};box-shadow:${shd};color:${d?'#fff':'#bbb'}"><span>${st}</span></div>`;
+  });
+  h+=`</div>`;
+  h+=`<div class="legend">${legend.map(l=>`<div class="legend-item"><div class="legend-dot" style="background:${l.c}"></div>${l.l}</div>`).join("")}</div>`;
+  if(mapSel[mapKey]&&data[mapSel[mapKey]]){
+    const d=data[mapSel[mapKey]],st=mapSel[mapKey];
+    h+=`<div class="state-detail" style="border-left:4px solid ${d.c}"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-weight:800;font-size:16px;color:#1a1a1a">${SN[st]||st}</div><span class="tag" style="background:${d.c}18;color:${d.c};border:1px solid ${d.c}30">${d.t}</span></div><div style="font-size:13px;color:#555;line-height:1.7">${d.d}</div></div>`;
+  }
+  return h;
+}
+
+function tileClick(st,mapKey){
+  const data=mapKey==="btb"?btb:mapKey==="sal"?sal:mj;
+  if(!data[st])return;
+  mapSel[mapKey]=mapSel[mapKey]===st?null:st;
+  render();
+}
+
+// ═══ CONTENT DATA ═══
+const canAsk=[{topic:"Work Eligibility",ok:"Are you authorized to work in the U.S.?",bad:"What country are you from? Are you a citizen?"},{topic:"Availability",ok:"Can you meet the attendance requirements of this role?",bad:"Do you have kids? Who watches your children?"},{topic:"Ability to Perform",ok:"Can you perform the essential functions of this job with or without accommodation?",bad:"Do you have any disabilities? Have you ever filed a workers' comp claim?"},{topic:"Experience",ok:"Tell me about your relevant experience for this role.",bad:"When did you graduate? (used to determine age)"},{topic:"Criminal History",ok:"After conditional offer: Have you been convicted of a crime? (where legally permitted)",bad:"Have you ever been arrested? (arrests ≠ convictions)"},{topic:"Drug Testing",ok:"This role requires a pre-employment drug screen. Are you able to comply?",bad:"Do you take any prescription medications? Do you use marijuana recreationally?"},{topic:"Salary",ok:"What are your salary expectations for this role?",bad:"What was your salary at your last job? (banned in many states)"},{topic:"References",ok:"Can you provide professional references?",bad:"Is your reference a relative? What is your maiden name?"},{topic:"Languages",ok:"Are you fluent in [language] as required by this role?",bad:"What is your native language? Where did you learn English?"},{topic:"Religion",ok:"Can you work the schedule required for this position?",bad:"What religious holidays do you observe? What church do you attend?"}];
+
+const protCat=[{cat:"Race / Color / Ethnicity",law:"Title VII",note:"Never ask about race, complexion, or ethnic background."},{cat:"Sex / Gender / Gender Identity",law:"Title VII, state laws",note:"Includes sexual orientation and transgender status in many jurisdictions."},{cat:"Religion",law:"Title VII",note:"Cannot ask about beliefs, practices, or religious holidays."},{cat:"National Origin",law:"Title VII",note:"Cannot ask about birthplace, ancestry, or native language."},{cat:"Age (40+)",law:"ADEA",note:"Cannot ask graduation dates, age, or birth year."},{cat:"Disability",law:"ADA",note:"Cannot ask about disabilities, medical history, or workers comp history pre-offer."},{cat:"Pregnancy / Family Status",law:"PDA, FMLA",note:"Cannot ask about pregnancy, plans for children, or childcare."},{cat:"Genetic Information",law:"GINA",note:"Cannot ask about family medical history."},{cat:"Veteran / Military Status",law:"USERRA",note:"Cannot discriminate; may ask about relevant skills gained."},{cat:"Credit History",law:"State laws (varies)",note:"Many states restrict or ban credit checks for employment."}];
+
+const redFlags=[{p:'"You do not look old enough to have that much experience!"',cat:"Age",risk:"Implies age-based assumptions.",fix:'\"That is an impressive background. Tell me more about your role at [company].\"'},{p:'"Is that your maiden name or married name?"',cat:"Marital Status / Gender",risk:"Reveals marital status.",fix:'"Have you worked under other names for employment verification? (post-offer only)"'},{p:'"Oh, you have an accent. Where are you originally from?"',cat:"National Origin",risk:"Directly probes national origin.",fix:'"Skip entirely. Stick to: Tell me what interested you about this role."'},{p:'"This role requires a lot of energy. Can you keep up?"',cat:"Age / Disability",risk:"Implies concerns about age or disability.",fix:'"This role requires [specific task]. Can you perform these essential functions with or without accommodation?"'},{p:'"We are a young, energetic team. You would fit right in!"',cat:"Age",risk:'Describing culture by age = age-discrimination signal.',fix:'"Our team is collaborative and fast-paced. Let me tell you about the projects."'},{p:'"Will your husband/wife be okay with the travel schedule?"',cat:"Marital / Family Status",risk:"Asks about spousal status.",fix:'"This role requires 30% travel. Does that align with your expectations?"'}];
+
+const scenarios=[{q:"During a phone screen, a candidate mentions they recently had a baby. You say: Congratulations! How old is your baby? Will you need schedule accommodations?",risk:"HIGH RISK",a:"Even with good intentions, this opens the door to family status/pregnancy discrimination. Instead: Congratulations! Let me tell you about the schedule for this role. Does that work for you?",color:"#dc2626"},{q:"A candidate has a resume gap from 2019-2021. You ask: Were you dealing with a health issue during that time?",risk:"HIGH RISK",a:"Never ask about health. Instead: Can you walk me through your experience during this period? Let the candidate choose what to share.",color:"#dc2626"},{q:"A drug screen in a legal-marijuana state comes back positive for THC only. You immediately rescind the offer.",risk:"HIGH RISK",a:"In many states, you cannot rescind solely for THC (except safety-sensitive roles). Check state law, consult legal, follow your written policy.",color:"#dc2626"},{q:"A background check reveals a 15-year-old misdemeanor theft. The role is a marketing manager. You want to rescind.",risk:"MODERATE RISK",a:"You must conduct an individualized assessment. A 15-year-old theft conviction likely has low relevance to marketing. Consider: nature, time elapsed, job-relatedness.",color:"#b39500"},{q:"A candidate asks: Do you drug test? You respond: Yes, after a conditional offer. Here is our policy.",risk:"GOOD PRACTICE",a:"Exactly right. Be transparent about the process and timing. Provide written documentation.",color:"#16a34a"},{q:"You email a combined document with the background check disclosure, consent form, and job application.",risk:"HIGH RISK",a:"Under FCRA, background check disclosure must be a standalone document. Combining it violates federal law and can lead to class-action lawsuits.",color:"#dc2626"},{q:"You reject a candidate and they file an EEOC charge. Two weeks later, their friend applies and you screen them out quickly.",risk:"HIGH RISK",a:"This could be construed as retaliation. Retaliation claims extend to third parties closely associated with the complainant.",color:"#dc2626"},{q:"Your company uses an AI resume screener. You notice it rarely advances candidates from certain zip codes. You continue using it.",risk:"HIGH RISK",a:"This is textbook disparate impact. Zip code screening can be a proxy for race/national origin. Stop using the tool, report to compliance, and request a bias audit immediately.",color:"#dc2626"}];
+
+const quizQs=[{q:"When can you first ask about criminal history in Ban the Box states?",o:["On the application","First phone screen","After conditional offer","Final interview"],c:2,e:"Ban the Box prohibits criminal history inquiries until after a conditional offer."},{q:"A candidate voluntarily says she is pregnant. What should you do?",o:["Ask about her due date","Share with hiring manager","Acknowledge briefly, do NOT follow up, redirect to job topics","Ask about maternity leave"],c:2,e:"When candidates volunteer protected info, do not follow up. Acknowledge politely and redirect."},{q:"Under FCRA, the background check disclosure must be:",o:["Part of the job application","A standalone document with ONLY the disclosure","Verbally communicated","Sent after the check is completed"],c:1,e:"FCRA requires the disclosure be standalone. Bundling violates federal law."},{q:"A forklift operator in Nevada tests positive for marijuana. Can you rescind?",o:["Yes, marijuana is federally illegal","Safety-sensitive roles are typically exempt","Never, you cannot test in Nevada","Only with a 30-day retest window"],c:1,e:"Nevada prohibits refusal to hire based on marijuana tests, but safety-sensitive positions are typically exempt."},{q:"Which is a COMPLIANT interview question?",o:["What year did you graduate?","Can you perform essential functions with or without accommodation?","Do you have reliable childcare?","Where is your accent from?"],c:1,e:"Asking about essential job functions (with/without accommodation) is ADA-compliant."},{q:"What are the three EEOC individualized assessment factors?",o:["Severity, number of offenses, attitude","Nature/gravity of offense, time elapsed, relevance to job","Conviction type, sentence, references","Category, recidivism risk, company cost"],c:1,e:"The EEOC framework: (1) nature/gravity, (2) time elapsed, (3) relevance to the job."},{q:"A job posting in Colorado does NOT include a pay range. This is:",o:["Fine, pay transparency is optional","A violation — CO requires pay ranges in all postings","Only required for remote roles","Only required for government jobs"],c:1,e:"Colorado's Equal Pay for Equal Work Act requires compensation ranges in all job postings."},{q:"After pre-adverse action notice, how long must you wait?",o:["24 hours","At least 5 business days","30 calendar days","No waiting required"],c:1,e:"Give candidates at least 5 business days. Some jurisdictions require longer."},{q:"A policy requiring a college degree for a warehouse supervisor role is challenged. This is an example of:",o:["Legitimate qualification","Disparate treatment","Disparate impact","Hostile work environment"],c:2,e:"If the degree requirement disproportionately screens out protected groups and isn't job-related, it creates disparate impact."},{q:"Which constitutes disparate impact discrimination?",o:["Validated skills test for the role","Credit check for cashiers (where allowed)","Blanket rejection of all criminal convictions without assessment","Same behavioral questions for all"],c:2,e:"Blanket criminal policies without individualized assessment create disparate impact per EEOC."},{q:"A candidate files an EEOC charge. You then give a negative reference when their new prospective employer calls.",o:["Fine, you are being honest","Retaliation — the negative reference is connected to the charge","Only a problem if in writing","Allowed if factually accurate"],c:1,e:"Adverse actions against someone engaged in protected activity constitute retaliation."},{q:"Under GINA, which is prohibited?",o:["Asking if they can lift 50 lbs","Asking about family medical history","Post-offer physical exam","Asking about workplace injuries"],c:1,e:"GINA prohibits requesting genetic information including family medical history."},{q:"How long must you retain job applications and interview notes at minimum?",o:["6 months","1 year","3 years","5 years"],c:1,e:"Title VII, ADA, and ADEA require at least 1 year. OFCCP contractors: 2 years."},{q:'During I-9 verification, a new hire presents a valid passport. You ask to also see their Social Security card.',o:["Good practice","Required by E-Verify","Illegal — you cannot request specific documents","Only for non-citizens"],c:2,e:"Requesting specific documents beyond what is required constitutes document abuse under INA."},{q:"Your team rejects 80% of candidates with criminal records but only 40% without. No individualized assessment is used.",o:["Legal if applied consistently","Likely disparate impact violation","Legal if job-related","Only illegal if intentional"],c:1,e:"A facially neutral policy that disproportionately impacts protected groups without individualized assessment creates disparate impact."}];
+
+const templates=[{t:"Drug Screen Notification",c:`Dear [Candidate Name],
+
+Congratulations on your conditional offer for the [Position Title] role at Spark Companies.
+
+As part of our standard pre-employment process, all candidates for this position are required to complete a drug screening.
+
+NEXT STEPS:
+- You will receive instructions from [Testing Provider] to schedule your test
+- Complete within [X] business days
+- Results reviewed by our Medical Review Officer (MRO)
+- MRO will contact you directly with any questions
+
+Your offer is contingent upon successful completion.
+
+This policy is applied uniformly to all candidates for this position category.
+
+Sincerely,
+[Recruiter Name]
+Spark Companies`},{t:"Background Check Disclosure and Consent",c:`BACKGROUND CHECK DISCLOSURE
+
+IMPORTANT: THIS IS A STANDALONE DISCLOSURE DOCUMENT
+
+Spark Companies may obtain a consumer report and/or investigative consumer report about you from a third-party consumer reporting agency for employment purposes.
+
+You have the right under the FCRA to:
+- Request disclosure of the nature and scope of any investigative report
+- Receive a copy of any report obtained
+- Dispute any inaccurate information
+
+Reporting agency: [CRA Name, Address, Phone]
+
+AUTHORIZATION
+
+I, [Candidate Name], authorize Spark Companies to obtain a consumer report as described above.
+
+Signature: ________________________
+Date: ________________________
+Printed Name: ________________________
+
+NOTE: This must be a STANDALONE form per FCRA requirements.`},{t:"Pre-Adverse Action Notice",c:`Dear [Candidate Name],
+
+Information in a consumer report we obtained may affect our employment decision for the [Position Title] position.
+
+Enclosed:
+1. Complete copy of the consumer report
+2. Summary of your rights under the FCRA
+
+YOU HAVE THE RIGHT TO:
+- Review the enclosed report
+- Dispute inaccurate information with the reporting agency
+- Respond within [X business days, minimum 5]
+
+Reporting agency: [CRA Name, Address, Phone]
+
+The agency did not make this decision.
+
+Sincerely,
+[Recruiter Name]
+Spark Companies`},{t:"Final Adverse Action Notice",c:`Dear [Candidate Name],
+
+After careful consideration, including an individualized assessment, we have decided not to proceed with your candidacy for [Position Title].
+
+This decision was based, in whole or in part, on information from:
+[CRA Name, Address, Phone]
+
+PLEASE NOTE:
+- The agency did NOT make this decision
+- The agency cannot provide specific reasons
+- You may obtain a free copy of your report within 60 days
+- You may dispute accuracy or completeness
+
+We appreciate your interest in Spark Companies.
+
+Sincerely,
+[Recruiter Name]
+Spark Companies`}];
+
+const retData=[{rec:"Job applications & resumes",per:"1 year min",law:"Title VII, ADA, ADEA",n:"OFCCP contractors: 2 years."},{rec:"Interview notes & evaluation forms",per:"1 year min",law:"Title VII, ADA, ADEA",n:"OFCCP: 2 years. Includes scorecards."},{rec:"Background check reports & consent",per:"5 years rec.",law:"FCRA",n:"Store separately from personnel files."},{rec:"Drug test results",per:"1 yr (5 yrs DOT)",law:"ADA, DOT, State",n:"Store in confidential medical files."},{rec:"I-9 forms",per:"3 yrs from hire OR 1 yr after term",law:"INA",n:"Do NOT store ID copies unless E-Verify."},{rec:"EEO-1 reports",per:"2 yrs (3 yrs OFCCP)",law:"Title VII",n:"OFCCP contractors: 3 years."},{rec:"Adverse action notices",per:"5 years rec.",law:"FCRA",n:"Keep all notices together."},{rec:"Accommodation documentation",per:"1 year min",law:"ADA",n:"Store in confidential medical file."},{rec:"Job postings & descriptions",per:"1 year min",law:"Title VII, OFCCP",n:"Keep version used when position open."},{rec:"Salary/compensation records",per:"2 yrs (3 yrs FLSA)",law:"Equal Pay Act, FLSA",n:"Critical for pay equity audits."}];
+
+const faqItems=[{q:"A candidate brings up their disability before I ask. What do I do?",a:"Acknowledge neutrally and redirect to role requirements. Do NOT ask follow-ups. Do NOT document the disability."},{q:"Can I Google a candidate before the interview?",a:"Risky. Use a designated non-decision-maker screener who filters out protected info."},{q:"A hiring manager asks for 'young, energetic' candidates. What do I do?",a:"Age discrimination red flag. Push back with specific skills. Escalate to Tamika Coleman if it persists."},{q:"Candidate failed drug test but says they have a prescription. Now what?",a:"Route through MRO. NEVER ask candidates to disclose prescriptions to you."},{q:"Can I reject for a criminal record?",a:"Not automatically. Follow Ban the Box, conduct individualized assessment per EEOC, follow FCRA adverse action process."},{q:"Do I need to include a pay range in a job posting?",a:"Depends on state and where candidates may be located. CA, CO, WA, NYC, IL, and others require it. Check the Salary & Pay Transparency section."}];
+
+// ═══ RENDER ENGINE ═══
+function render(){
+  const m=document.getElementById("main-content");
+  const fn=renderers[active];
+  m.innerHTML=fn?fn():`<div style="padding:40px;text-align:center;color:#999">Section: ${active}</div>`;
+}
+
+function sectionTitle(title,sub){
+  return`<div class="section-title"><h2><span class="bar"></span>${title}</h2>${sub?`<p class="sub">${sub}</p>`:""}</div>`;
+}
+
+function tag(color,text){return`<span class="tag" style="background:${color}15;color:${color};border:1px solid ${color}30">${text}</span>`}
+
+function toggleAccordion(key){
+  accordionState[key]=!accordionState[key];
+  render();
+}
+
+function copyTemplate(idx){
+  navigator.clipboard.writeText(templates[idx].c).then(()=>{
+    const btn=document.getElementById("copy-btn-"+idx);
+    if(btn){btn.innerHTML="✓ Copied!";btn.style.background="#16a34a";setTimeout(()=>{btn.innerHTML="📋 Copy";btn.style.background="#1a1a1a"},2000)}
+  });
+}
+
+// ═══ RENDERERS ═══
+const renderers={
+
+overview:()=>`
+<div style="background:#fff;border-radius:16px;padding:32px;margin-bottom:16px;border:1px solid var(--B);border-bottom:4px solid var(--S);position:relative;overflow:hidden">
+  <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle at top right,#FFD60025,transparent 70%)"></div>
+  <div style="display:flex;align-items:center;gap:10px"><div style="position:relative;width:32px;height:32px"><div style="position:absolute;inset:0;background:var(--S);border-radius:7px;transform:rotate(3deg)"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="#1a1a1a"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div></div><div><div style="font-weight:800;font-size:15px;color:var(--D);letter-spacing:-0.5px;line-height:1.1">SPARK</div><div style="font-weight:500;font-size:9px;color:#888;letter-spacing:2px;line-height:1.1">COMPANIES</div></div></div>
+  <h1 style="margin:16px 0 0;font-size:26px;font-weight:800;color:var(--D)">Recruitment Compliance<br/>Training</h1>
+  <p style="margin:8px 0 0;color:var(--M);font-size:14px">What You Can and Cannot Ask — Protecting Candidates, Protecting the Company</p>
+  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+    <div style="display:inline-flex;align-items:center;gap:6px;background:var(--D);color:var(--S);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700">🔒 PROPRIETARY & CONFIDENTIAL</div>
+    <div style="display:inline-flex;align-items:center;gap:6px;background:#f0f4ff;color:#3730a3;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid #c7d2fe">${VERSION}</div>
+  </div>
+</div>
+<div class="grid-3 mb-24">
+  ${[{n:"50",t:"State Maps",d:"Interactive maps for Ban the Box, salary, and marijuana laws"},{n:"15",t:"Quiz Questions",d:"Scenario-based assessment with explanations"},{n:"4",t:"Templates",d:"FCRA-compliant letters and disclosure forms"},{n:"12",t:"Red Flag Phrases",d:"Casual phrases that create real legal risk"},{n:"8",t:"Practice Scenarios",d:"Real-world situations with expert guidance"},{n:"10",t:"Core Modules",d:"Protected categories, disparate impact, retaliation"}].map(m=>`<div style="background:#fff;border:1px solid var(--B);border-radius:10px;padding:14px"><div style="color:var(--D);font-weight:800;font-size:22px;display:flex;align-items:center;gap:6px"><span style="background:var(--S);width:4px;height:18px;border-radius:2px;display:inline-block"></span>${m.n}</div><div style="font-weight:600;font-size:13px;color:var(--D)">${m.t}</div><div style="font-size:12px;color:#888">${m.d}</div></div>`).join("")}
+</div>
+<div style="background:#FFD60015;border:1px solid var(--S);border-radius:12px;padding:14px;display:flex;gap:12px;align-items:flex-start">
+  <span style="flex-shrink:0;margin-top:2px">⚠️</span>
+  <div style="font-size:12px;color:#5c4d00"><strong>Disclaimer:</strong> This training reflects general U.S. employment law principles for educational purposes. Laws vary by jurisdiction. Always consult your legal/compliance team for jurisdiction-specific guidance. Data current as of February 2026.</div>
+</div>`,
+
+protected:()=>`${sectionTitle("Federally Protected Categories","Questions touching these categories create legal liability.")}
+<div class="flex-col gap-8">${protCat.map(p=>`<div class="card hl"><div style="display:grid;grid-template-columns:180px 1fr;gap:12px;align-items:start"><div><div style="font-weight:700;font-size:13px;color:var(--D)">${p.cat}</div>${tag("#444",p.law)}</div><div style="font-size:13px;color:#555;padding-top:2px">${p.note}</div></div></div>`).join("")}</div>`,
+
+dosdont:()=>`${sectionTitle("Do's and Don'ts by Topic","Side-by-side compliant vs. non-compliant questions.")}
+<div class="flex-col gap-10">${canAsk.map(i=>`<div style="background:#fff;border:1px solid var(--B);border-radius:10px;padding:14px"><div style="font-weight:700;font-size:12px;color:var(--D);margin-bottom:8px;background:var(--S);display:inline-block;padding:2px 12px;border-radius:5px">${i.topic}</div><div class="grid-2"><div class="pill-ok"><div class="pill-label" style="color:var(--G)">✅ COMPLIANT</div><div style="font-size:12px;color:var(--D);font-style:italic">${i.ok}</div></div><div class="pill-bad"><div class="pill-label" style="color:var(--R)">❌ NON-COMPLIANT</div><div style="font-size:12px;color:var(--D);font-style:italic">${i.bad}</div></div></div></div>`).join("")}</div>`,
+
+redflags:()=>`${sectionTitle("Red Flag Phrases","Casual things recruiters say without realizing the legal risk.")}
+<div class="flex-col gap-10">${redFlags.map((r,i)=>{const open=accordionState["rf-"+i];return`<div class="accordion"><button class="accordion-header${open?" open":""}" onclick="toggleAccordion('rf-${i}')"><div style="display:flex;gap:12px;align-items:flex-start;flex:1;text-align:left"><span style="color:var(--R);flex-shrink:0">🚨</span><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--D);font-style:italic">${r.p}</div><div style="margin-top:4px">${tag("#dc2626",r.cat)}</div></div></div><span>${open?"▼":"▶"}</span></button>${open?`<div class="accordion-body"><div style="font-size:12px;color:#991b1b;margin-bottom:8px;background:#dc262608;padding:10px;border-radius:6px"><strong>Risk:</strong> ${r.risk}</div><div style="font-size:12px;color:#166534;background:#16a34a08;padding:10px;border-radius:6px"><strong>Say Instead:</strong> ${r.fix}</div></div>`:""}</div>`}).join("")}</div>`,
+
+disparate:()=>`${sectionTitle("Disparate Impact 101","The legal theory behind most systemic hiring lawsuits.")}
+<div class="alert-box alert-red"><div style="font-weight:700;font-size:13px;color:var(--R);margin-bottom:6px">WHY THIS MATTERS</div><div style="font-size:13px;color:var(--D)">Disparate impact is the #1 legal theory in systemic hiring lawsuits. No proof of intent required. A facially neutral policy that disproportionately screens out a protected group is illegal unless job-related and consistent with business necessity.</div></div>
+<div class="grid-2 mb-20"><div style="background:#fff;border:1px solid var(--B);border-radius:10px;padding:16px"><div style="font-weight:700;font-size:13px;color:var(--purple);margin-bottom:8px">DISPARATE TREATMENT</div><div style="font-size:12px;color:#555;line-height:1.7"><strong>What:</strong> Intentional discrimination.<br/><strong>Example:</strong> Not interviewing based on name/ethnicity.<br/><strong>Proof:</strong> Requires intent evidence.<br/><strong>Defense:</strong> Very difficult.</div></div><div style="background:#fff;border:1px solid var(--B);border-radius:10px;padding:16px"><div style="font-weight:700;font-size:13px;color:var(--purple);margin-bottom:8px">DISPARATE IMPACT</div><div style="font-size:12px;color:#555;line-height:1.7"><strong>What:</strong> Neutral policy, disproportionate effect.<br/><strong>Example:</strong> Unnecessary degree requirement.<br/><strong>Proof:</strong> Statistical evidence. No intent required.<br/><strong>Defense:</strong> Job-related + business necessity.</div></div></div>
+<div class="card hl" style="background:#FFD60008"><div style="font-weight:700;font-size:13px;color:var(--D);margin-bottom:6px">THE 4/5 RULE (80% RULE)</div><div style="font-size:13px;color:#555;line-height:1.7">If a selection rate for a protected group is less than 80% of the highest group's rate, it indicates adverse impact. Example: 60% white pass rate, 40% Black = 67% ratio, below 80% threshold.</div></div>`,
+
+retaliation:()=>`${sectionTitle("Retaliation Awareness","The #1 charge filed with the EEOC.")}
+<div class="alert-box alert-red"><div style="font-weight:700;font-size:13px;color:var(--R);margin-bottom:6px">RETALIATION = #1 EEOC CHARGE</div><div style="font-size:13px;color:var(--D)">Over 55% of all EEOC charges include retaliation. It does not require the underlying claim to be valid.</div></div>
+<h3 style="font-size:14px;margin:0 0 10px;color:var(--D);font-weight:700">What Counts as Retaliation?</h3>
+<div class="flex-col gap-8 mb-20">${[{a:"Rejecting a candidate because they filed a previous EEOC charge",n:"Even if against a different employer"},{a:"Giving a negative reference after a complaint",n:"Connected adverse action = retaliation"},{a:"Rescinding offer after learning of protected activity",n:"Timing is critical evidence"},{a:"Retaliating against a candidate's family member",n:"Third-party retaliation is illegal"},{a:"Blacklisting within the industry",n:"Can constitute retaliation after employment ends"}].map(i=>`<div style="background:#dc262606;border:1px solid #dc262615;border-radius:8px;padding:12px"><div style="font-weight:600;font-size:12px;color:var(--D)">${i.a}</div><div style="font-size:11px;color:#888;margin-top:2px">${i.n}</div></div>`).join("")}</div>
+<div class="card hl"><div style="font-weight:700;font-size:13px;color:var(--D);margin-bottom:6px">RECRUITER RULES</div><div style="font-size:13px;color:#555;line-height:1.8"><strong>1.</strong> Never ask about prior EEOC activity.<br/><strong>2.</strong> If you learn of protected activity, do NOT change evaluation.<br/><strong>3.</strong> Document everything with job-related reasons.<br/><strong>4.</strong> If a manager tells you to reject someone for protected activity, refuse and escalate.<br/><strong>5.</strong> When in doubt, call Tamika Coleman or Legal.</div></div>`,
+
+drug:()=>`${sectionTitle("Drug Screening & Marijuana Laws","Click any state to see marijuana employment law. All 50 states + DC.")}
+${buildTileMap(mj,"mj",[{c:"#7c3aed",l:"Strong off-duty protections"},{c:"#3b82f6",l:"Medical protections"},{c:"#059669",l:"Legal, no protections"},{c:"#f59e0b",l:"Medical only, no protections"},{c:"#94a3b8",l:"No/minimal law"}])}
+<div class="alert-box alert-red" style="margin-top:16px"><div style="font-weight:700;font-size:13px;color:var(--R);margin-bottom:6px">FEDERAL UPDATE — DEC 2025</div><div style="font-size:13px;color:var(--D)">President Trump signed an executive order directing marijuana rescheduling to Schedule III. Formal rulemaking is ongoing. DOT safety-sensitive rules and testing requirements remain UNCHANGED. Continue current testing protocols.</div></div>
+<h3 style="font-size:14px;margin:0 0 10px;color:var(--D);font-weight:700">Pre-Employment Drug Testing Rules</h3>
+<div class="grid-2 mb-16">${[{s:true,r:"Notify candidates in writing that a drug test is required"},{s:true,r:"Test only AFTER a conditional offer of employment"},{s:true,r:"Apply drug testing policy consistently to all candidates for the same role"},{s:true,r:"Use a certified lab (SAMHSA/CAP accredited)"},{s:false,r:"Ask candidates what prescription medications they take"},{s:false,r:"Test only certain candidates based on appearance or assumptions"},{s:false,r:"Ask if the candidate uses marijuana recreationally"},{s:false,r:"Disclose test results to unauthorized parties"}].map(r=>`<div style="background:${r.s?"#16a34a":"#dc2626"}08;border:1px solid ${r.s?"#16a34a":"#dc2626"}20;border-radius:7px;padding:10px;display:flex;gap:8px;align-items:flex-start"><span style="flex-shrink:0;margin-top:1px">${r.s?"✅":"❌"}</span><span style="font-size:12px;color:var(--D)">${r.r}</span></div>`).join("")}</div>`,
+
+background:()=>`${sectionTitle("Background Checks & Ban the Box","FCRA requirements, Ban the Box state laws, and adverse action.")}
+<div class="flex-col gap-8 mb-24">${[{r:"Provide written disclosure AND obtain written consent (separate document) before running a background check",law:"FCRA"},{r:"Use the individualized assessment framework before adverse action",law:"EEOC"},{r:"Follow the 2-step adverse action process: pre-adverse, waiting period, final adverse action",law:"FCRA"},{r:"Never use arrest records (without conviction) as a basis for employment decisions",law:"EEOC / State"},{r:"Check state and local Ban the Box laws before asking about criminal history",law:"State/Local"},{r:"Do not run a background check until after a conditional offer in many jurisdictions",law:"Fair Chance"},{r:"Keep all background check information strictly confidential and stored securely",law:"FCRA"},{r:"Ensure your background check vendor is FCRA-compliant",law:"FCRA"}].map(r=>`<div style="background:#fff;border:1px solid var(--B);border-left:3px solid var(--S);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:12px"><div style="font-size:12px;flex:1;color:var(--D)">${r.r}</div>${tag("#92600a",r.law)}</div>`).join("")}</div>
+<h3 style="font-size:14px;margin:0 0 10px;color:var(--D);font-weight:700">Adverse Action — Step by Step</h3>
+${[{s:"1",t:"Pre-Adverse Action Notice",d:"Send candidate a copy of the report, summary of FCRA rights, and letter explaining you are considering not hiring based on results."},{s:"2",t:"Reasonable Waiting Period",d:"Allow at least 5 business days (some jurisdictions require more) to review and dispute findings."},{s:"3",t:"Individualized Assessment",d:"Consider nature/gravity of offense, time elapsed, and relevance to the job. Document your assessment."},{s:"4",t:"Final Adverse Action Notice",d:"Send final notice with: background check company name, statement they did not make the decision, and candidate right to dispute."}].map((s,i)=>`<div style="display:flex;gap:14px;padding-bottom:16px"><div style="display:flex;flex-direction:column;align-items:center"><div class="step-circle">${s.s}</div>${i<3?'<div class="step-line"></div>':""}</div><div class="card" style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--D);margin-bottom:2px">${s.t}</div><div style="font-size:12px;color:#555">${s.d}</div></div></div>`).join("")}
+
+<div style="margin-top:40px;padding-top:32px;border-top:3px solid var(--S)">
+<div class="section-title"><h2><span class="bar"></span>Ban the Box — State-by-State Guide</h2><p class="sub">Criminal history inquiry restrictions. Click any state for details.</p></div>
+
+<div class="alert-box alert-yellow" style="margin-bottom:20px">
+<div style="font-weight:700;font-size:14px;color:#5c4d00;margin-bottom:8px">WHAT IS "BAN THE BOX"?</div>
+<div style="font-size:13px;color:#5c4d00;line-height:1.8">
+<strong>"The Box"</strong> refers to the checkbox on job applications that asks: <em>"Have you ever been convicted of a crime?"</em><br/><br/>
+<strong>"Ban the Box"</strong> laws remove that question from the initial application. These laws do <strong>NOT</strong> prevent employers from ever asking about criminal history — they control <strong>when</strong> in the hiring process you can ask.<br/><br/>
+<strong>The purpose:</strong> Candidates get evaluated on their qualifications first. Criminal history is considered later — typically after a conditional offer — and must include an individualized assessment under EEOC guidelines.<br/><br/>
+<strong>Why it matters to recruiters:</strong> If you ask about criminal history too early in a Ban the Box jurisdiction, the company faces fines (up to $20,000 per violation in some states), lawsuits, and potential class-action liability. The timing varies by state — some allow the question after the first interview, others only after a conditional offer. Many cities have their OWN ordinances that are stricter than the state law.
+</div>
+</div>
+
+<div style="background:#fff;border:1px solid var(--B);border-radius:10px;padding:16px;margin-bottom:20px">
+<div style="font-weight:700;font-size:13px;color:var(--D);margin-bottom:12px">HOW BAN THE BOX CHANGES YOUR PROCESS</div>
+<div class="grid-2">
+<div style="background:#dc262608;border:1px solid #dc262625;border-radius:8px;padding:14px">
+<div style="font-weight:700;color:var(--R);font-size:12px;margin-bottom:8px">❌ NON-COMPLIANT PROCESS</div>
+<div style="font-size:12px;color:var(--D);line-height:1.7">1. Application asks "convicted of a crime?"<br/>2. Candidate checks "yes"<br/>3. Application auto-rejected<br/>4. No interview, no assessment<br/>5. <strong>= Legal liability + disparate impact</strong></div>
+</div>
+<div style="background:#16a34a08;border:1px solid #16a34a25;border-radius:8px;padding:14px">
+<div style="font-weight:700;color:var(--G);font-size:12px;margin-bottom:8px">✅ COMPLIANT PROCESS</div>
+<div style="font-size:12px;color:var(--D);line-height:1.7">1. No criminal history on application<br/>2. Candidate evaluated on qualifications<br/>3. Conditional offer extended<br/>4. Criminal history inquiry (where permitted)<br/>5. Individualized assessment conducted<br/>6. <strong>= Defensible, compliant decision</strong></div>
+</div>
+</div>
+</div>
+
+<div style="background:#fff;border:1px solid var(--B);border-radius:10px;padding:16px;margin-bottom:20px">
+<div style="font-weight:700;font-size:13px;color:var(--D);margin-bottom:8px">THREE TIERS OF BAN THE BOX LAWS</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="background:#7c3aed10;border:1px solid #7c3aed25;border-radius:8px;padding:12px">
+<div style="font-weight:700;font-size:12px;color:#7c3aed;margin-bottom:4px">TIER 1 — PRIVATE EMPLOYER LAWS (Strongest)</div>
+<div style="font-size:12px;color:var(--D);line-height:1.6">Applies to private-sector employers. You cannot ask about criminal history on the application or (in most cases) until after a conditional offer. States: CA, CO, CT, HI, IL, MA, MN, NJ, NM, OR, RI, VT, WA, TX (new 2025).</div>
+</div>
+<div style="background:#3b82f610;border:1px solid #3b82f625;border-radius:8px;padding:12px">
+<div style="font-weight:700;font-size:12px;color:#3b82f6;margin-bottom:4px">TIER 2 — PUBLIC SECTOR ONLY (Moderate)</div>
+<div style="font-size:12px;color:var(--D);line-height:1.6">Only applies to government/public employers. Private employers are not restricted at the state level — but many cities within these states have local ordinances that DO cover private employers. States: AZ, DE, GA, IN, KS, KY, LA, MD, MI, MO, NE, NV, NH, NY, NC, ND, OH, OK, PA, TN, UT, VA, WI, DC.</div>
+</div>
+<div style="background:#94a3b810;border:1px solid #94a3b825;border-radius:8px;padding:12px">
+<div style="font-weight:700;font-size:12px;color:#94a3b8;margin-bottom:4px">TIER 3 — NO STATE LAW</div>
+<div style="font-size:12px;color:var(--D);line-height:1.6">No statewide Ban the Box law exists. However, some of these states have local city/county ordinances. Always check local laws. Follow federal EEOC guidance on individualized assessment regardless. States: AL, AK, AR, FL, ID, IA, MS, MT, SC, SD, WV, WY.</div>
+</div>
+</div>
+</div>
+
+${buildTileMap(btb,"btb",[{c:"#7c3aed",l:"Private employers"},{c:"#3b82f6",l:"Public sector only"},{c:"#94a3b8",l:"No state law"}])}
+
+<div class="card hl" style="margin-top:16px"><div style="font-weight:700;font-size:13px;color:var(--D);margin-bottom:6px">KEY TAKEAWAY</div><div style="font-size:13px;color:#555;line-height:1.7">14 states apply Ban the Box to private employers. Many more cover public employment only — but cities within those states may have broader local ordinances. Texas joined in 2025 (15+ employees). <strong>Always check BOTH state AND local laws for every jurisdiction where you recruit.</strong> When in doubt, the safest approach is to wait until after a conditional offer to ask about criminal history — that is compliant everywhere.</div></div>
+</div>`,
+
+social:()=>`${sectionTitle("Social Media Screening","One of the highest-risk areas in modern recruiting.")}
+<div class="alert-box alert-red"><div style="font-weight:700;font-size:13px;color:var(--R);margin-bottom:6px">THE CORE PROBLEM</div><div style="font-size:13px;color:var(--D)">When you view social media, you are almost guaranteed to see protected information. Once seen, nearly impossible to prove it did not influence your decision.</div></div>
+<div class="grid-2"><div style="background:#16a34a08;border:1px solid #16a34a25;border-radius:10px;padding:16px"><div style="font-weight:700;color:var(--G);font-size:12px;margin-bottom:8px">BEST PRACTICES</div>${["Written social media screening policy","Designated screener, NOT decision-maker","Screener filters out protected info","Apply consistently to ALL candidates","Screen AFTER initial qualification screening","Document what was reviewed and shared","Only review public profiles"].map(t=>`<div style="font-size:12px;padding:3px 0;color:var(--D);display:flex;gap:6px"><span style="flex-shrink:0">✅</span>${t}</div>`).join("")}</div><div style="background:#dc262608;border:1px solid #dc262625;border-radius:10px;padding:16px"><div style="font-weight:700;color:var(--R);font-size:12px;margin-bottom:8px">NEVER DO</div>${["Do not personally search candidates you evaluate","Do not ask for social media passwords (illegal 25+ states)","Do not send friend/follow requests","Do not decide based on personal/political/religious content","Do not screenshot protected information","Do not search some candidates but not others","Do not use fake profiles"].map(t=>`<div style="font-size:12px;padding:3px 0;color:var(--D);display:flex;gap:6px"><span style="flex-shrink:0">❌</span>${t}</div>`).join("")}</div></div>`,
+
+aitech:()=>`${sectionTitle("AI and Technology in Hiring","AI tools, ATS systems, and tech in hiring.")}
+<div class="alert-box alert-yellow"><div style="font-weight:700;font-size:13px;color:#5c4d00;margin-bottom:4px">WHY THIS MATTERS NOW</div><div style="font-size:13px;color:#5c4d00">AI hiring tools under increasing scrutiny. NYC Local Law 144, Illinois, Colorado, and the EEOC have all taken action. AI tools can create disparate impact if not audited.</div></div>
+${[{t:"AI Resume Screening",items:[{s:true,t:"Use tools audited for bias"},{s:true,t:"Human review of AI rejections"},{s:false,t:"Sole reliance on AI for rejections"},{s:false,t:"Untested tools"}]},{t:"NYC Local Law 144",items:[{s:true,t:"Annual bias audits of AEDTs"},{s:true,t:"10 days notice to candidates"},{s:false,t:"Using AEDTs without audit or notice"}]},{t:"Video Interview AI",items:[{s:true,t:"Inform candidates AI is used"},{s:true,t:"Validated, audited tools"},{s:false,t:"Facial/emotion detection (banned IL+)"},{s:false,t:"AI scores as sole decision factor"}]}].map(sec=>`<div style="margin-bottom:16px"><h3 style="font-size:14px;margin:0 0 8px;color:var(--D);font-weight:700">${sec.t}</h3><div class="grid-2" style="gap:8px">${sec.items.map(i=>`<div style="background:${i.s?"#16a34a":"#dc2626"}08;border:1px solid ${i.s?"#16a34a":"#dc2626"}20;border-radius:7px;padding:10px;display:flex;gap:8px"><span style="flex-shrink:0">${i.s?"✅":"❌"}</span><span style="font-size:12px;color:var(--D)">${i.t}</span></div>`).join("")}</div></div>`).join("")}`,
+
+state:()=>`${sectionTitle("State-by-State: Ban the Box","Quick-access map. For full explanation of Ban the Box, see the Background Checks section.")}
+<div style="background:#3b82f608;border:1px solid #3b82f630;border-radius:10px;padding:14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;cursor:pointer" onclick="active='background';buildNav();render()"><span style="font-size:16px">👉</span><div style="font-size:13px;color:#3b82f6"><strong>New:</strong> Full Ban the Box explanation, three-tier breakdown, and compliance process are now in the <strong>Background Checks</strong> section. <span style="text-decoration:underline">Click here to go there.</span></div></div>
+${buildTileMap(btb,"btb",[{c:"#7c3aed",l:"Private employers"},{c:"#3b82f6",l:"Public sector only"},{c:"#94a3b8",l:"No state law"}])}
+<div class="card hl" style="margin-top:16px"><div style="font-weight:700;font-size:13px;color:var(--D);margin-bottom:6px">KEY TAKEAWAY</div><div style="font-size:13px;color:#555;line-height:1.7">14 states apply Ban the Box to private employers. Many more cover public employment only — but cities within those states may have broader local ordinances. Texas joined in 2025 (15+ employees). Always check local laws in addition to state requirements.</div></div>`,
+
+salary:()=>`${sectionTitle("Salary History & Pay Transparency","Click any state to see salary history bans and pay transparency requirements.")}
+${buildTileMap(sal,"sal",[{c:"#7c3aed",l:"Ban + Transparency"},{c:"#3b82f6",l:"History Ban only"},{c:"#059669",l:"Transparency/Local only"},{c:"#94a3b8",l:"No state law"}])}
+<div class="card hl" style="margin-top:16px"><div style="font-weight:700;font-size:13px;color:var(--D);margin-bottom:6px">RECRUITER BEST PRACTICE</div><div style="font-size:13px;color:#555;line-height:1.7"><strong>Always ask:</strong> "What are your compensation expectations?" — never "What do you currently make?"<br/><strong>Always include:</strong> Pay ranges in job postings if the role is open to candidates in covered states.<br/><strong>Always document:</strong> How pay decisions are made using job-related factors.</div></div>`,
+
+marijuana:()=>`${sectionTitle("Marijuana Employment Map","Click any state. Separated from Drug Screening for clarity.")}
+${buildTileMap(mj,"mj",[{c:"#7c3aed",l:"Strong off-duty protections"},{c:"#3b82f6",l:"Medical protections"},{c:"#059669",l:"Legal, no protections"},{c:"#f59e0b",l:"Medical only, no protections"},{c:"#94a3b8",l:"No/minimal law"}])}`,
+
+timeline:()=>{const stages=[{s:"Job Posting",items:["Include EEO statement","Include pay range (where required)","No age/gender preference language","List essential job functions"]},{s:"Application",items:["No criminal history questions (Ban the Box)","No salary history questions (where banned)","No disability/health/age questions"]},{s:"Phone Screen / Interview",items:["Ask only about essential function ability","No protected category questions","Document job-related reasons for every disposition"]},{s:"Conditional Offer",items:["NOW: initiate drug testing","NOW: run background checks (FCRA consent)","NOW: ask about criminal history (most jurisdictions)"]},{s:"Post-Offer / Pre-Start",items:["Complete adverse action process if needed","Individualized assessment for criminal findings","I-9 within 3 days of start"]}];return`${sectionTitle("Compliance Timeline","What you can do at each hiring stage.")}${stages.map((s,i)=>`<div style="display:flex;gap:14px;margin-bottom:16px"><div style="display:flex;flex-direction:column;align-items:center;width:36px"><div class="step-circle" style="width:30px;height:30px;font-size:13px">${i+1}</div>${i<4?'<div class="step-line"></div>':""}</div><div class="card" style="flex:1"><div style="font-weight:800;font-size:14px;color:var(--D);margin-bottom:6px">${s.s}</div>${s.items.map(it=>`<div style="display:flex;gap:6px;font-size:12px;color:#444;margin-bottom:3px"><span style="color:#b39500;flex-shrink:0">▸</span>${it}</div>`).join("")}</div></div>`).join("")}`},
+
+escalation:()=>{const steps=[{q:"Unsure if a question is compliant?",a:"DO NOT ASK IT.",n:"Then escalate.",color:"var(--R)"},{q:"Drug screening or background check policy?",a:"Contact: Tamika Coleman, HR Compliance Lead",n:"She will confirm for your specific state and role.",color:"#b39500"},{q:"State-specific legal question?",a:"Contact: Legal / Employment Counsel",n:"Especially for: Ban the Box, salary history, marijuana, AI.",color:"var(--purple)"},{q:"Candidate disclosed protected information?",a:"Do NOT document. Do NOT share with hiring team.",n:"Contact: Tamika Coleman or Mary Patrico.",color:"var(--R)"},{q:"Someone retaliating against a candidate?",a:"STOP. Do NOT participate.",n:"Escalate immediately to Tamika Coleman → Legal.",color:"var(--R)"}];return`${sectionTitle("Escalation Flowchart","When unsure, follow this decision tree.")}${steps.map((s,i)=>`<div style="display:flex;gap:14px;margin-bottom:4px"><div style="display:flex;flex-direction:column;align-items:center;width:36px"><div style="width:28px;height:28px;border-radius:50%;background:${s.color}20;border:2px solid ${s.color};display:flex;align-items:center;justify-content:center;flex-shrink:0">⚠</div>${i<4?'<div style="width:2px;height:20px;background:var(--B)"></div>':""}</div><div style="background:#fff;border:1px solid var(--B);border-radius:10px;padding:14px;flex:1;margin-bottom:8px"><div style="font-size:13px;font-weight:600;color:var(--D);margin-bottom:4px">${s.q}</div><div style="font-size:13px;font-weight:700;color:${s.color};margin-bottom:2px">${s.a}</div><div style="font-size:12px;color:#666">${s.n}</div></div></div>`).join("")}
+<div class="card hl" style="margin-top:12px"><div style="font-weight:700;font-size:13px;color:var(--D);margin-bottom:6px">ESCALATION CONTACTS</div><div class="grid-2"><div style="background:var(--L);border-radius:6px;padding:10px"><div style="font-weight:600;font-size:12px;color:var(--D)">HR Compliance Lead</div><div style="font-size:12px;color:var(--M)">Tamika Coleman</div></div><div style="background:var(--L);border-radius:6px;padding:10px"><div style="font-weight:600;font-size:12px;color:var(--D)">Director of Operations</div><div style="font-size:12px;color:var(--M)">Mary Patrico</div></div></div></div>`},
+
+retention:()=>`${sectionTitle("Record Retention Requirements","What to keep, how long, and where.")}
+<div class="flex-col gap-8">${retData.map(r=>`<div style="background:#fff;border:1px solid var(--B);border-left:3px solid var(--S);border-radius:8px;padding:14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><div style="font-weight:700;font-size:13px;color:var(--D)">${r.rec}</div>${tag("#7c3aed",r.per)}</div><div style="font-size:12px;color:#555">${r.n}</div><div style="font-size:11px;color:#999">Authority: ${r.law}</div></div>`).join("")}</div>`,
+
+documentation:()=>`${sectionTitle("Document Your Decisions","Your #1 defense in any discrimination lawsuit.")}
+<div class="alert-box alert-red"><div style="font-weight:700;font-size:13px;color:var(--R);margin-bottom:6px">WHY THIS IS YOUR BEST DEFENSE</div><div style="font-size:13px;color:var(--D)">In every discrimination lawsuit, the employer must articulate a legitimate, non-discriminatory reason. If you cannot point to documented, job-related reasons, you lose.</div></div>
+<div class="grid-2"><div style="background:#16a34a08;border:1px solid #16a34a25;border-radius:10px;padding:16px"><div style="font-weight:700;color:var(--G);font-size:12px;margin-bottom:8px">DEFENSIBLE</div>${['"Lacks required 3 years SQL experience"','"Could not articulate PM methodology"','"Candidate B: stronger assessment (87 vs 72)"','"Candidate withdrew on [date]"'].map(t=>`<div style="font-size:12px;padding:3px 0;color:var(--D)">${t}</div>`).join("")}</div><div style="background:#dc262608;border:1px solid #dc262625;border-radius:10px;padding:16px"><div style="font-weight:700;color:var(--R);font-size:12px;margin-bottom:8px">INDEFENSIBLE</div>${['"Not a good fit"','"Overqualified"','"Would not mesh with culture"','"Just did not click"'].map(t=>`<div style="font-size:12px;padding:3px 0;color:var(--D)">${t}</div>`).join("")}</div></div>
+<div class="card hl" style="margin-top:16px;background:#FFD60008"><div style="font-weight:700;font-size:13px;color:var(--D);margin-bottom:6px">THE GOLDEN RULE</div><div style="font-size:13px;color:#555">Every rejection must answer: <strong>"What specific, job-related qualification did this candidate lack?"</strong></div></div>`,
+
+notetaking:()=>`${sectionTitle("Interview Note-Taking","What to document vs. what NEVER to write down.")}
+<div class="grid-2"><div style="background:#16a34a08;border:1px solid #16a34a25;border-radius:10px;padding:16px"><div style="font-weight:700;color:var(--G);font-size:12px;margin-bottom:10px">DOCUMENT</div>${["Specific skills and qualifications","Relevant work experience","Behavioral question answers","Technical assessment results","Communication skills (role-relevant)","Schedule fit","Competency ratings"].map(t=>`<div style="font-size:12px;padding:3px 0;color:var(--D);display:flex;gap:6px"><span style="flex-shrink:0">✅</span>${t}</div>`).join("")}</div><div style="background:#dc262608;border:1px solid #dc262625;border-radius:10px;padding:16px"><div style="font-weight:700;color:var(--R);font-size:12px;margin-bottom:10px">NEVER DOCUMENT</div>${["Physical appearance","Perceived age, race, ethnicity","Pregnancy or family planning","Disability observations","Accent beyond job requirements","Religious attire or symbols","Marital status","ANY protected characteristic"].map(t=>`<div style="font-size:12px;padding:3px 0;color:var(--D);display:flex;gap:6px"><span style="flex-shrink:0">❌</span>${t}</div>`).join("")}</div></div>`,
+
+accommodation:()=>`${sectionTitle("Accommodation Requests","Handling disability disclosures and the interactive process.")}
+${[{t:"During the Interview",c:"#3b82f6",items:["Provide requested accommodations, no questions about disability","You do not need to know the specific disability","Ask: What can we do so you can fully participate?","Document accommodation PROVIDED, NOT the disability"]},{t:"If Candidate Discloses",c:"#7c3aed",items:["Say: Thank you for letting me know.","Do NOT ask follow-ups about the disability","Redirect to essential job functions","If they need accommodation, route to HR"]},{t:"Post-Offer: Interactive Process",c:"#059669",items:["MAY ask about needed accommodations after offer","Engage in good-faith interactive process","Document: request, options, outcome, rationale","Store ALL documentation in CONFIDENTIAL medical file"]}].map(sec=>`<div style="margin-bottom:16px"><h3 style="font-size:14px;margin:0 0 8px;color:var(--D);font-weight:700;display:flex;align-items:center;gap:8px"><span style="background:${sec.c};width:10px;height:10px;border-radius:50%;display:inline-block"></span>${sec.t}</h3><div class="flex-col" style="gap:6px">${sec.items.map(i=>`<div class="card"><div style="font-size:12px;color:var(--D)">${i}</div></div>`).join("")}</div></div>`).join("")}`,
+
+i9everify:()=>`${sectionTitle("I-9 & E-Verify","Anti-discrimination rules most recruiters get wrong.")}
+<div class="alert-box alert-red"><div style="font-weight:700;font-size:13px;color:var(--R);margin-bottom:6px">DOCUMENT ABUSE IS ILLEGAL</div><div style="font-size:13px;color:var(--D)">Requesting specific documents, more documents than required, or treating employees differently based on citizenship status is illegal under the INA.</div></div>
+<div class="grid-2"><div style="background:#16a34a08;border:1px solid #16a34a25;border-radius:10px;padding:16px"><div style="font-weight:700;color:var(--G);font-size:12px;margin-bottom:8px">DO</div>${["Complete Section 2 within 3 business days","Accept any valid List A OR List B + List C","Accept documents that reasonably appear genuine","Same process for ALL new hires","Let employee choose which documents"].map(t=>`<div style="font-size:12px;padding:3px 0;color:var(--D);display:flex;gap:6px"><span>✅</span>${t}</div>`).join("")}</div><div style="background:#dc262608;border:1px solid #dc262625;border-radius:10px;padding:16px"><div style="font-weight:700;color:var(--R);font-size:12px;margin-bottom:8px">NEVER</div>${["Request specific documents","Request MORE than required","Reject valid-appearing documents","Treat differently based on appearance/name","Require E-Verify before start date"].map(t=>`<div style="font-size:12px;padding:3px 0;color:var(--D);display:flex;gap:6px"><span>❌</span>${t}</div>`).join("")}</div></div>`,
+
+templates:()=>`${sectionTitle("Communication Templates","Click to expand and copy.")}
+<div class="flex-col gap-12">${templates.map((t,i)=>{const open=accordionState["tpl-"+i];return`<div class="accordion"><button class="accordion-header${open?" open":""}" onclick="toggleAccordion('tpl-${i}')"><div style="display:flex;align-items:center;gap:8px"><span>📧</span><span style="font-weight:700;font-size:13px;color:var(--D)">${t.t}</span></div><span>${open?"▼":"▶"}</span></button>${open?`<div class="accordion-body"><div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button id="copy-btn-${i}" onclick="copyTemplate(${i})" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--D);color:var(--S);border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px">📋 Copy</button></div><pre class="template">${t.c}</pre></div>`:""}</div>`}).join("")}</div>`,
+
+faq:()=>`${sectionTitle("Recruiter FAQ","Real questions, clear answers.")}
+<div class="flex-col gap-8">${faqItems.map((item,i)=>{const open=accordionState["faq-"+i];return`<div class="accordion"><button class="accordion-header${open?" open":""}" onclick="toggleAccordion('faq-${i}')"><div style="display:flex;align-items:center;gap:10px;flex:1;text-align:left"><span>💬</span><span style="font-weight:600;font-size:13px;color:var(--D)">${item.q}</span></div><span>${open?"▼":"▶"}</span></button>${open?`<div class="accordion-body"><div style="font-size:13px;color:#333;line-height:1.7">${item.a}</div></div>`:""}</div>`}).join("")}</div>`,
+
+scenarios:()=>`${sectionTitle("Practice Scenarios","Click each scenario to reveal assessment.")}
+<div class="flex-col gap-10">${scenarios.map((s,i)=>{const open=accordionState["sc-"+i];return`<div class="accordion"><button class="accordion-header" onclick="toggleAccordion('sc-${i}')" style="gap:10px;align-items:flex-start"><div style="display:flex;gap:10px;align-items:flex-start;flex:1;text-align:left"><div style="background:var(--S);border-radius:7px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--D);font-size:13px;flex-shrink:0">${i+1}</div><div style="flex:1"><div style="font-size:12px;color:var(--D);line-height:1.5">${s.q}</div><div style="margin-top:6px">${tag(s.color,s.risk)}</div></div></div><span>${open?"▼":"▶"}</span></button>${open?`<div style="border-top:1px solid var(--B);padding:14px;background:${s.color}06"><div style="font-weight:700;font-size:12px;color:${s.color};margin-bottom:4px">GUIDANCE:</div><div style="font-size:12px;color:#333;line-height:1.6">${s.a}</div></div>`:""}</div>`}).join("")}</div>`,
+
+quiz:()=>{
+  const total=quizQs.length;
+  const answered=Object.keys(quizAnswers).length;
+  const score=quizSubmitted?Object.keys(quizAnswers).filter(k=>quizAnswers[k]===quizQs[parseInt(k)].c).length:0;
+  let h=`<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">${sectionTitle("Knowledge Quiz","15 scenario-based questions. Passing: 12/15.")}${quizSubmitted?`<button onclick="resetQuiz()" style="display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--D);color:var(--S);border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px;flex-shrink:0">🔄 Retake</button>`:""}</div>`;
+  if(quizSubmitted){
+    const col=score>=12?"var(--G)":score>=9?"var(--S)":"var(--R)";
+    h+=`<div style="background:${col}10;border:2px solid ${col};border-radius:12px;padding:20px;margin-bottom:20px;text-align:center"><div style="font-size:44px;font-weight:800;color:var(--D)">${score}<span style="font-size:22px;color:#999">/${total}</span></div><div style="font-size:15px;font-weight:700;color:${col}">${score>=12?"Excellent! Compliance-ready.":score>=9?"Good effort. Review missed topics.":"Additional review recommended."}</div></div>`;
+  }
+  h+=`<div class="flex-col" style="gap:14px">`;
+  quizQs.forEach((q,qi)=>{
+    const ans=quizAnswers[qi]!==undefined;
+    const cor=ans&&quizAnswers[qi]===q.c;
+    const borderCol=quizSubmitted?(cor?"var(--G)40":"var(--R)40"):"var(--B)";
+    const leftCol=quizSubmitted?(cor?"var(--G)":"var(--R)"):(ans?"var(--S)":"#ddd");
+    h+=`<div style="background:#fff;border:1px solid ${borderCol};border-radius:10px;padding:16px;border-left:3px solid ${leftCol}">`;
+    h+=`<div style="display:flex;gap:8px;margin-bottom:10px"><div style="background:var(--S);color:var(--D);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0">${qi+1}</div><div style="font-size:13px;color:var(--D);font-weight:600;line-height:1.5">${q.q}</div></div>`;
+    h+=`<div style="display:flex;flex-direction:column;gap:5px;margin-left:34px">`;
+    q.o.forEach((opt,oi)=>{
+      const isSel=quizAnswers[qi]===oi;
+      const isCorr=oi===q.c;
+      let cls="quiz-option";
+      if(quizSubmitted){if(isCorr)cls+=" correct";else if(isSel)cls+=" wrong"}
+      else if(isSel)cls+=" selected";
+      const rdBdr=isSel?(quizSubmitted?(isCorr?"var(--G)":"var(--R)"):"#b39500"):"#ccc";
+      const rdBg=isSel?(quizSubmitted?(isCorr?"var(--G)":"var(--R)"):"var(--S)"):"transparent";
+      h+=`<button class="${cls}" onclick="selectQuiz(${qi},${oi})" ${quizSubmitted?"disabled":""}><div class="radio-circle" style="border-color:${rdBdr};background:${rdBg}">${isSel?'<div style="width:7px;height:7px;border-radius:50%;background:'+(quizSubmitted?"#fff":"var(--D)")+'"></div>':""}</div><span style="flex:1">${opt}</span>${quizSubmitted&&isCorr?"<span style='color:var(--G)'>✅</span>":""}${quizSubmitted&&isSel&&!isCorr?"<span style='color:var(--R)'>❌</span>":""}</button>`;
+    });
+    h+=`</div>`;
+    if(quizSubmitted){h+=`<div style="margin-left:34px;margin-top:8px;padding:10px;background:#FFD60012;border-radius:7px;font-size:12px;color:#5c4d00;line-height:1.5"><strong>Explanation:</strong> ${q.e}</div>`}
+    h+=`</div>`;
+  });
+  h+=`</div>`;
+  if(!quizSubmitted){
+    const canSubmit=answered===total;
+    h+=`<div style="text-align:center;margin-top:24px"><button onclick="submitQuiz()" style="padding:12px 40px;background:${canSubmit?"var(--D)":"#ccc"};color:${canSubmit?"var(--S)":"#888"};border:none;border-radius:10px;cursor:${canSubmit?"pointer":"not-allowed"};font-weight:800;font-size:15px" ${canSubmit?"":"disabled"}>Submit (${answered}/${total})</button></div>`;
+  }
+  return h;
+},
+
+onepager:()=>`${sectionTitle("Quick Reference Cards","Print-ready quick reference.")}
+<div style="border:2px solid #b39500;border-radius:12px;padding:20px;margin-bottom:16px;background:#fff"><h3 style="color:#b39500;margin:0 0 12px;font-size:15px;border-bottom:2px solid #b39500;padding-bottom:8px">7 GOLDEN RULES</h3><div style="font-size:12px;line-height:1.9;color:#333"><strong>1.</strong> When in doubt, DO NOT ask.<br/><strong>2.</strong> Every question ties to job ability.<br/><strong>3.</strong> If they volunteer protected info, do not follow up.<br/><strong>4.</strong> Apply everything CONSISTENTLY.<br/><strong>5.</strong> Know your state laws.<br/><strong>6.</strong> Document job-related reasons for every decision.<br/><strong>7.</strong> When unsure, escalate to Tamika Coleman or Mary Patrico.</div></div>
+<div style="border:2px solid #b39500;border-radius:12px;padding:20px;margin-bottom:16px;background:#fff"><h3 style="color:#b39500;margin:0 0 12px;font-size:15px;border-bottom:2px solid #b39500;padding-bottom:8px">INTERVIEW QUESTION SWAP</h3><table style="width:100%;border-collapse:collapse;font-size:11px"><thead><tr><th style="text-align:left;padding:4px 6px;border-bottom:2px solid var(--D);color:var(--R);font-size:10px">DO NOT ASK</th><th style="text-align:left;padding:4px 6px;border-bottom:2px solid var(--D);color:var(--G);font-size:10px">ASK INSTEAD</th></tr></thead><tbody>${[["Where are you from?","Authorized to work in U.S.?"],["How old are you?","Over 18? (if required)"],["Do you have kids?","Can you meet the schedule?"],["Any disabilities?","Perform essential functions?"],["Ever arrested?","Convicted? (post-offer)"],["Last salary?","Compensation expectations?"],["What church?","Work required schedule?"],["Smoke weed?","Comply with drug testing?"]].map(r=>`<tr style="border-bottom:1px solid var(--B)"><td style="padding:4px 6px;color:#991b1b">${r[0]}</td><td style="padding:4px 6px;color:#166534">${r[1]}</td></tr>`).join("")}</tbody></table></div>`,
+
+acknowledgment:()=>{
+  if(ackData.submitted){
+    return`${sectionTitle("Training Acknowledgment","Complete after all training and quiz.")}<div style="background:#16a34a10;border:2px solid var(--G);border-radius:16px;padding:32px;text-align:center"><div style="font-size:48px;margin-bottom:12px">✅</div><div style="font-size:20px;font-weight:800;color:var(--D);margin-bottom:8px">Acknowledgment Submitted</div><div style="font-size:14px;color:#555"><strong>${ackData.name}</strong></div><div style="font-size:13px;color:#888">Submitted: ${ackData.date}</div></div>`;
+  }
+  return`${sectionTitle("Training Acknowledgment","Complete after all training and quiz.")}
+  <div style="background:#fff;border:2px solid var(--S);border-radius:16px;padding:24px">
+    <div style="font-size:13px;color:#333;line-height:1.8;margin-bottom:20px">By signing below, I acknowledge completion of the Spark Companies Recruitment Compliance Training (${VERSION}). I understand compliance is a condition of my role and failure may result in disciplinary action.</div>
+    <div class="flex-col gap-12">
+      <div><label style="font-size:12px;font-weight:600;color:var(--D);display:block;margin-bottom:4px">Full Name</label><input type="text" id="ack-name" value="${ackData.name}" oninput="ackData.name=this.value" style="width:100%;padding:10px 14px;border:1px solid var(--B);border-radius:8px;font-size:14px;font-family:inherit;box-sizing:border-box" placeholder="Enter your full name"/></div>
+      <div><label style="font-size:12px;font-weight:600;color:var(--D);display:block;margin-bottom:4px">Date</label><input type="date" id="ack-date" value="${ackData.date}" oninput="ackData.date=this.value" style="padding:10px 14px;border:1px solid var(--B);border-radius:8px;font-size:14px;font-family:inherit"/></div>
+      <label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;font-size:12px;color:var(--D)"><input type="checkbox" id="ack-check" ${ackData.checked?"checked":""} onchange="ackData.checked=this.checked" style="margin-top:2px"/><span>I confirm I have completed all training and the Knowledge Quiz, and agree to comply.</span></label>
+      <button onclick="submitAck()" style="padding:12px 32px;background:var(--D);color:var(--S);border:none;border-radius:10px;cursor:pointer;font-weight:800;font-size:15px;margin-top:8px">Submit Acknowledgment</button>
+    </div>
+  </div>`;
+},
+
+trainerguide:()=>`${sectionTitle("Trainer Script & Guide","Facilitation guide.")}
+<div style="background:#fff;border:2px solid var(--S);border-radius:16px;padding:24px"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="background:var(--S);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px">⏰</div><div><div style="font-weight:800;font-size:16px;color:var(--D)">Session Overview</div><div style="font-size:13px;color:var(--M)">~120 minutes | ${VERSION}</div></div></div><div class="grid-4">${[{n:"10",t:"Sections",c:"var(--S)"},{n:"~120",t:"Minutes",c:"#3b82f6"},{n:"15",t:"Quiz Qs",c:"#7c3aed"},{n:"8",t:"Scenarios",c:"var(--G)"}].map(m=>`<div style="background:${m.c}12;border:1px solid ${m.c}30;border-radius:8px;padding:10px;text-align:center"><div style="font-weight:800;font-size:20px;color:var(--D)">${m.n}</div><div style="font-size:11px;color:var(--M)">${m.t}</div></div>`).join("")}</div></div>`,
+
+resources:()=>`${sectionTitle("Helpful Resources & Links","Bookmarkable links.")}
+${[{cat:"Federal Agencies",items:[{n:"EEOC — Employer Guidance",u:"https://www.eeoc.gov/employers"},{n:"EEOC — Arrest & Conviction Records",u:"https://www.eeoc.gov/laws/guidance/enforcement-guidance-consideration-arrest-and-conviction-records-employment-decisions"},{n:"FTC — FCRA",u:"https://www.ftc.gov/legal-library/browse/statutes/fair-credit-reporting-act"},{n:"ADA.gov",u:"https://www.ada.gov/"}]},{cat:"Background Checks",items:[{n:"PBSA",u:"https://thepbsa.org/"},{n:"NELP — Ban the Box",u:"https://www.nelp.org/campaign/ban-the-box-fair-chance-hiring/"}]},{cat:"Drug Screening",items:[{n:"SAMHSA",u:"https://www.samhsa.gov/workplace"},{n:"NORML — State Laws",u:"https://norml.org/laws/"}]},{cat:"Pay Transparency",items:[{n:"HR Dive — Salary History Bans",u:"https://www.hrdive.com/news/salary-history-ban-states-list/516662/"},{n:"NWLC — Equal Pay Laws",u:"https://nwlc.org/resource/equal-pay-laws/"}]},{cat:"AI in Hiring",items:[{n:"NYC Local Law 144",u:"https://www.nyc.gov/site/dca/about/automated-employment-decision-tools.page"},{n:"EEOC — AI Fairness",u:"https://www.eeoc.gov/ai"}]},{cat:"Accommodation",items:[{n:"JAN — Job Accommodation Network",u:"https://askjan.org/"},{n:"EEOC — Reasonable Accommodation",u:"https://www.eeoc.gov/laws/guidance/enforcement-guidance-reasonable-accommodation-and-undue-hardship-under-ada"}]}].map(cat=>`<div style="margin-bottom:20px"><h3 style="font-size:14px;font-weight:800;color:var(--D);margin-bottom:10px;display:flex;align-items:center;gap:8px"><span style="background:var(--S);width:4px;height:16px;border-radius:2px;display:inline-block"></span>${cat.cat}</h3><div class="flex-col" style="gap:6px">${cat.items.map(it=>`<a href="${it.u}" target="_blank" rel="noopener noreferrer" style="background:#fff;border:1px solid var(--B);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:center;text-decoration:none"><span style="color:var(--S);flex-shrink:0">🔗</span><span style="font-weight:600;font-size:13px;color:var(--D)">${it.n}</span></a>`).join("")}</div></div>`).join("")}`
+
+};
+
+// ═══ QUIZ FUNCTIONS ═══
+function selectQuiz(qi,oi){
+  if(quizSubmitted)return;
+  quizAnswers[qi]=oi;
+  render();
+}
+function submitQuiz(){
+  if(Object.keys(quizAnswers).length===quizQs.length){quizSubmitted=true;render()}
+}
+function resetQuiz(){
+  quizAnswers={};quizSubmitted=false;render();
+}
+function submitAck(){
+  if(ackData.name&&ackData.date&&ackData.checked){ackData.submitted=true;render()}
+}
+
+// ═══ INIT ═══
+buildNav();
+render();
+</script>
+</body>
+</html>
